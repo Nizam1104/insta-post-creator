@@ -3,10 +3,16 @@ import { canvasService } from "@/services/canvasService"
 import { useEffect, useState } from "react";
 
 export default function SetCanvasColor() {
-  const [canvasColor, setCanvasColor] = useState(localStorage.getItem('postCanvasBgColour') || '#ffffff');
+  const [canvasColor, setCanvasColor] = useState('#ffffff');
   const [rgbColor, setRgbColor] = useState({ r: 255, g: 255, b: 255 });
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [hexColorCode, setHexColorCode] = useState(localStorage.getItem('postCanvasBgColour') || '#ffffff')
+  const [hexColorCode, setHexColorCode] = useState('#ffffff');
+
+  useEffect(() => {
+    const savedColor = localStorage.getItem('postCanvasBgColour') || '#ffffff';
+    setCanvasColor(savedColor);
+    setHexColorCode(savedColor);
+  }, []);
 
   const changeColor = (e) => {
     const color = e.target.value;
@@ -15,7 +21,7 @@ export default function SetCanvasColor() {
     updateRgbColor(color);
   };
 
-  const changeColorCode = () => {
+  const setCnvsClrfrmHexInput = () => {
     if (/^#[0-9A-Fa-f]{6}$/i.test(hexColorCode)) {
       canvasService.setCanvasColor(hexColorCode);
       setCanvasColor(hexColorCode);
@@ -88,7 +94,7 @@ export default function SetCanvasColor() {
               className="w-full p-2 bg-gray-700 rounded"
               placeholder="#FFFFFF"
             />
-            <button onClick={changeColorCode} className="px-8 py-1 bg-blue-500 text-sm rounded-md">Set</button>
+            <button onClick={setCnvsClrfrmHexInput} className="px-8 py-1 bg-blue-500 text-sm rounded-md">Set</button>
             </div>
             </div>
           </div>

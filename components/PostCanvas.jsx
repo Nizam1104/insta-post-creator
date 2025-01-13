@@ -1,40 +1,27 @@
-"use client"
-import { useRef, useEffect } from 'react';
-import { canvasService } from '../services/canvasService';
+"use client";
+import { useEffect } from "react";
+import { useFabric } from "@/hooks/useFabric";
+import { canvasService } from "@/services/canvasService";
 
 const PostCanvas = () => {
-  const canvasRef = useRef(null);
-  const instagramSize = 1080;
+  const { canvas, fabricModule } = useFabric("canvasContainer");
 
   useEffect(() => {
-    if (canvasRef.current) {
-      canvasService.initialize(canvasRef.current);
-      const savedColor = localStorage.getItem('postCanvasBgColour') || '#ffffff';
-      canvasService.setCanvasColor(savedColor);
+    if (canvas && fabricModule) {
+      canvasService.initialize(canvas, fabricModule);
+      
+      const savedColor = localStorage.getItem('postCanvasBgColour');
+      if (savedColor) {
+        canvasService.setCanvasColor(savedColor);
+      }
     }
-  }, []);
+  }, [canvas, fabricModule]);
 
   return (
-    <div>
-      <canvas
-        ref={canvasRef}
-        width={instagramSize}
-        height={instagramSize}
-        style={{
-          width: '100%',
-          maxWidth: '500px',
-          backgroundColor: 'white',
-          border: '1px solid #ddd'
-        }}
-      />
-      <button 
-        onClick={() => canvasService.downloadPng()}
-        style={{ marginTop: '10px', padding: '8px 16px' }}
-      >
-        Download as PNG
-      </button>
+    <div className="w-[500px] h-[500px] border border-gray-200 rounmd flex justify-center items-center">
+      <canvas id="canvasContainer" style={{ width: "100%", height: "100%" }} />
     </div>
   );
-}
+};
 
 export default PostCanvas;
