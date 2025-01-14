@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export const useFabric = (canvasId) => {
   const [canvas, setCanvas] = useState(null);
   const [fabricModule, setFabricModule] = useState(null);
+  const isInitialized = useRef(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && !isInitialized.current) {
+      isInitialized.current = true;
       
       import('fabric').then((module) => {
         const { Canvas } = module;
@@ -17,7 +19,7 @@ export const useFabric = (canvasId) => {
         const fabricCanvas = new Canvas(canvasId, {
           width: 500,
           height: 500,
-          backgroundColor: 'red'
+          backgroundColor: localStorage.getItem('postCanvasBgColour') || '#FFFFFF'
         });
         
         fabricCanvas.renderAll();
@@ -30,6 +32,9 @@ export const useFabric = (canvasId) => {
       return () => {
         if (canvas) {
           canvas.dispose();
+          setCanvas(null);
+          setFabricModule(null);
+          isInitialized.current = false;
         }
       };
     }
