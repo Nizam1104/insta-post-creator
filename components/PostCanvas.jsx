@@ -15,6 +15,13 @@ const PostCanvas = () => {
         canvasService.setCanvasColor(savedColor);
       }
     }
+
+    return () => {
+      if (canvas) {
+        canvasService.clearSelectedElement();
+        canvasService.saveCanvas();
+      }
+    };
   }, [canvas, fabricModule]);
 
   return (
