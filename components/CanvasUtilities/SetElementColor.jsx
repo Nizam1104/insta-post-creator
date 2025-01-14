@@ -1,6 +1,7 @@
 "use client"
 
 import { canvasService } from "@/services/canvasService";
+import { colorService } from "@/services/colorService";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
@@ -37,7 +38,7 @@ export default function SetElementColor() {
   };
 
   useEffect(() => {
-    canvasService.setElementColor(color);
+    colorService.setElementColor(color);
     setHexInput(color);
     updateRgbColor(color);
   }, [color]);

@@ -6,7 +6,7 @@ export const shadowService = {
   },
 
   setElementShadow(options) {
-    if (!this.canvasService.selectedElement) return;
+    if (!this.canvasService?.selectedElement) return;
     
     const shadow = new this.canvasService.fabricModule.Shadow({
       color: options.color || 'rgba(0,0,0,0.5)',
@@ -36,7 +36,7 @@ export const shadowService = {
   },
 
   removeElementShadow() {
-    if (!this.canvasService.selectedElement) return;
+    if (!this.canvasService?.selectedElement) return;
     
     // Handle both single elements and groups
     if (this.canvasService.selectedElement._objects) {
