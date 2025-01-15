@@ -5,6 +5,10 @@ import { imageService } from "./imageService";
 import { deleteService } from "./deleteService";
 import { shapesService } from "./shapesService";
 import { textService } from "./textService";
+import { zIndexService } from "./zIndexService";
+
+
+import { testServices } from "./testServices";
 
 class CanvasService {
   canvas = null;
@@ -26,6 +30,8 @@ class CanvasService {
     deleteService.initialize(this)
     shapesService.initialize(this)
     textService.initialize(this)
+    zIndexService.initialize(this)
+    testServices.initialize(this)
 
 
     this.canvas.on({
@@ -119,6 +125,109 @@ class CanvasService {
         this.canvas.renderAll();
       }, 100);
     }
+  }
+
+  loadFromJson(jsonObj) {
+    // Parse the JSON object if it's a string
+    const parsedObj = typeof jsonObj === 'string' ? JSON.parse(jsonObj) : jsonObj;
+    
+    // Create a new canvas state object with the parsed elements
+    const canvasState = {
+      objects: parsedObj,
+      background: localStorage.getItem('postCanvasBgColour') || '#FFFFFF'
+    };
+
+    // Load the canvas with the new state
+    this.canvas.loadFromJSON(canvasState, () => {
+      // Set background color
+      this.canvas.backgroundColor = canvasState.background;
+      
+      // Render all elements
+      this.canvas.renderAll();
+      
+      // Optional: Adjust canvas dimensions if needed
+      this.canvas.setDimensions({
+        width: 500,
+        height: 500
+      });
+    });
+  }
+
+  loadFromElements(elements) {
+    if (!this.canvas || !Array.isArray(elements)) return;
+
+    // Clear existing canvas first
+    this.canvas.clear();
+
+    // Set canvas dimensions to Instagram standard
+    this.canvas.setDimensions({
+      width: 500,
+      height: 500
+    });
+
+    // Set background color from localStorage or default
+    this.canvas.backgroundColor = localStorage.getItem('postCanvasBgColour') || '#FFFFFF';
+
+    // Create a promise for each element to ensure proper loading order
+    const elementPromises = elements.map(element => {
+      return new Promise((resolve, reject) => {
+        try {
+          switch (element.type) {
+            case 'text':
+              const text = new this.fabricModule.Text(element.content, {
+                ...element.properties,
+                originX: 'center',
+                originY: 'center'
+              });
+              this.canvas.add(text);
+              resolve();
+              break;
+
+            case 'image':
+              this.fabricModule.Image.fromURL(element.src, img => {
+                img.set({
+                  ...element.properties,
+                  originX: 'center',
+                  originY: 'center'
+                });
+                this.canvas.add(img);
+                resolve();
+              }, {
+                crossOrigin: 'anonymous'
+              });
+              break;
+
+            case 'rect':
+              const rect = new this.fabricModule.Rect({
+                ...element.properties,
+                originX: 'center',
+                originY: 'center'
+              });
+              this.canvas.add(rect);
+              resolve();
+              break;
+
+            default:
+              console.warn(`Unsupported element type: ${element.type}`);
+              resolve();
+              break;
+          }
+        } catch (error) {
+          console.error(`Error loading element:`, error);
+          reject(error);
+        }
+      });
+    });
+
+    // Wait for all elements to load before rendering
+    Promise.all(elementPromises)
+      .then(() => {
+        this.canvas.renderAll();
+        this.addToHistory();
+      })
+      .catch(error => {
+        console.error('Error loading elements:', error);
+      });
   }
 
   addToHistory() {
