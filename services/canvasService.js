@@ -1,10 +1,4 @@
-import { colorService } from "./colorService";
-import { shadowService } from "./shadowService";
-import { opacityService } from "./opacityService";
-import { imageService } from "./imageService";
-import { deleteService } from "./deleteService";
-import { shapesService } from "./shapesService";
-import { textService } from "./textService";
+import { toRGB } from "./utilFunctions";
 
 class CanvasService {
   canvas = null;
@@ -18,15 +12,6 @@ class CanvasService {
   initialize(canvas, fabricModule) {
     this.canvas = canvas;
     this.fabricModule = fabricModule;
-
-    colorService.initialize(this)
-    shadowService.initialize(this)
-    opacityService.initialize(this)
-    imageService.initialize(this)
-    deleteService.initialize(this)
-    shapesService.initialize(this)
-    textService.initialize(this)
-
 
     this.canvas.on({
       'selection:updated': (e) => this.HandleElement(e),
@@ -75,12 +60,17 @@ class CanvasService {
   }
 
   HandleElement(e) {
-    this.selectedElement = e.selected || [];
+    // Clear selection if no elements are selected
+    if (!e.selected || e.selected.length === 0) {
+      this.selectedElement = null;
+    } else {
+      this.selectedElement = e.selected;
+    }
     this.notifyObservers();
   }
 
   clearSelectedElement() {
-    this.selectedElement = [];
+    this.selectedElement = null;
     this.notifyObservers();
   }
 
@@ -91,6 +81,174 @@ class CanvasService {
 
   notifyObservers() {
     this.observers.forEach(callback => callback(this.selectedElement));
+  }
+
+  deleteSelectedElement() {
+    if (!this.selectedElement || !this.canvas) return;
+    
+    // Handle both single elements and groups
+    if (this.selectedElement._objects) {
+      // If it's a group, remove all objects in the group
+      this.selectedElement._objects.forEach(element => {
+        this.canvas.remove(element);
+      });
+      this.canvas.remove(this.selectedElement);
+    } else {
+      // If it's multiple selected elements
+      this.selectedElement.forEach(element => {
+        this.removeElementFromCanvas(element);
+      });
+    }
+    
+    this.canvas.discardActiveObject();
+    this.canvas.renderAll();
+    this.clearSelectedElement();
+    this.saveCanvas();
+  }
+
+  setElementColor(colorCode) {
+    if (!this.selectedElement) return;
+    const x = toRGB(colorCode);
+    this.selectedElement[0].set('fill', `rgb(${x?.r || 0}, ${x?.g || 0}, ${x?.b || 0})`);
+    this.saveCanvas()
+    this.canvas.renderAll();
+  }
+
+  setCanvasColor(color) {
+    if (this.canvas) {
+      this.canvas.backgroundColor = color;
+      this.canvas.renderAll();
+      localStorage.setItem('postCanvasBgColour', color);
+    }
+    this.saveCanvas();
+  }
+
+  setElementOpacity(opacity) {
+    if (!this.selectedElement) return;
+    
+    // Handle both single elements and groups
+    if (this.selectedElement._objects) {
+      // If it's a group, set opacity for all objects in the group
+      this.selectedElement._objects.forEach(element => {
+        element.set('opacity', opacity);
+        element.setCoords(); // Add this line
+      });
+      this.selectedElement.set('opacity', opacity);
+      this.selectedElement.setCoords(); // Add this line
+    } else {
+      // If it's multiple selected elements
+      this.selectedElement.forEach(element => {
+        element.set('opacity', opacity);
+        element.setCoords(); // Add this line
+      });
+    }
+    
+    // Remove setTimeout and render immediately
+    this.saveCanvas();
+    this.canvas.renderAll();
+  }
+
+  setElementShadow(options) {
+    if (!this.selectedElement) return;
+    
+    const shadow = new this.fabricModule.Shadow({
+      color: options.color || 'rgba(0,0,0,0.5)',
+      blur: options.blur || 10,
+      offsetX: options.offsetX || 5,
+      offsetY: options.offsetY || 5
+    });
+
+    // Handle both single elements and groups
+    if (this.selectedElement._objects) {
+      // If it's a group, set shadow for all objects in the group
+      this.selectedElement._objects.forEach(element => {
+        element.set('shadow', shadow);
+      });
+      this.selectedElement.set('shadow', shadow);
+    } else {
+      // If it's multiple selected elements
+      this.selectedElement.forEach(element => {
+        element.set('shadow', shadow);
+      });
+    }
+    
+    setTimeout(() => {
+      this.canvas.renderAll();
+    }, 30)
+    this.saveCanvas();
+  }
+
+  removeElementShadow() {
+    if (!this.selectedElement) return;
+    
+    // Handle both single elements and groups
+    if (this.selectedElement._objects) {
+      // If it's a group, remove shadow from all objects in the group
+      this.selectedElement._objects.forEach(element => {
+        element.set('shadow', null);
+      });
+      this.selectedElement.set('shadow', null);
+    } else {
+      // If it's multiple selected elements
+      this.selectedElement.forEach(element => {
+        element.set('shadow', null);
+      });
+    }
+  
+    setTimeout(() => {
+      this.canvas.renderAll();
+    }, 30)
+    this.saveCanvas();
+  }
+
+  addRect() {
+    if (!this.canvas || !this.fabricModule) return;
+
+    const gradient = new this.fabricModule.Gradient({
+      type: "linear",
+      coords: { x1: 0, y1: 0, x2: 200, y2: 0 },
+      colorStops: [
+        { offset: 0, color: "red" },
+        { offset: 0.5, color: "yellow" },
+        { offset: 1, color: "green" },
+      ],
+    });
+
+    const rect = new this.fabricModule.Rect({
+      left: 200,
+      top: 100,
+      width: 100,
+      height: 100,
+      fill: gradient,
+      angle: 0,
+    });
+
+    this.canvas.add(rect);
+    this.canvas.renderAll();
+  }
+
+  async addImage(imageUrl) {
+    if (!this.canvas || !this.fabricModule || !imageUrl) return;
+
+    const img = await this.fabricModule.Image.fromURL(imageUrl);
+    img.set({
+      left: 100,
+      top: 100,
+      angle: 0,
+      scaleX: 0.3,
+      scaleY: 0.3
+    });
+
+    this.canvas.add(img);
+  }
+
+  addText(textValue) {
+    if (!this.canvas || !this.fabricModule || !textValue) return;
+
+    const textEle = new this.fabricModule.FabricText(textValue);
+    this.canvas.add(textEle);
+    this.canvas.renderAll();
+    this.saveCanvas();
   }
 
   saveCanvas() {

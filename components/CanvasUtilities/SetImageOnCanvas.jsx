@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useCallback } from 'react';
+import { canvasService } from '@/services/canvasService';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import compressImage from "@/services/compressImage"
-import { imageService } from '@/services/imageService';
 
 export default function SetImageOnCanvas () {
   const [imageUrl, setImageUrl] = useState('');
@@ -12,7 +12,7 @@ export default function SetImageOnCanvas () {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleAddImage = (url) => {
-    imageService.addImage(url);
+    canvasService.addImage(url);
     setImageUrl('');
   };
 

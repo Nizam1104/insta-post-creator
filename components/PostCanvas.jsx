@@ -2,7 +2,6 @@
 import { useEffect } from "react";
 import { useFabric } from "@/hooks/useFabric";
 import { canvasService } from "@/services/canvasService";
-import { colorService } from "@/services/colorService";
 
 const PostCanvas = () => {
   const { canvas, fabricModule } = useFabric("canvasContainer");
@@ -13,7 +12,7 @@ const PostCanvas = () => {
       
       const savedColor = localStorage.getItem('postCanvasBgColour');
       if (savedColor) {
-        colorService.setCanvasColor(savedColor);
+        canvasService.setCanvasColor(savedColor);
       }
     }
 

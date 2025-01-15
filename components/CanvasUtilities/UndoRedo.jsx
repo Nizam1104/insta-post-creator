@@ -4,7 +4,6 @@ import { IoIosUndo } from "react-icons/io";
 import { IoIosRedo } from "react-icons/io";
 import { Button } from "../ui/button";
 import { MdOutlineDelete } from "react-icons/md";
-import { deleteService } from "@/services/deleteService";
 
 export default function UndoRedoCanvas() {
   const handleUndo = () => {
@@ -16,7 +15,7 @@ export default function UndoRedoCanvas() {
   };
 
   const handleDelete = () => {
-    deleteService.deleteSelectedElement()
+    canvasService.deleteSelectedElement()
   }
 
   return (

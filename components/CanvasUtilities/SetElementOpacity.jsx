@@ -3,14 +3,13 @@
 import { useState, useEffect } from "react"
 import { canvasService } from "@/services/canvasService"
 import { useDebounce } from "@/hooks/useDebounce"
-import { opacityService } from "@/services/opacityService"
 
 export default function SetElementOpacity() {
   const [opacity, setOpacity] = useState(100)
   const debouncedOpacity = useDebounce(opacity, 100)
 
   useEffect(() => {
-    opacityService.setElementOpacity(debouncedOpacity / 100)
+    canvasService.setElementOpacity(debouncedOpacity / 100)
   }, [debouncedOpacity])
 
   useEffect(() => {
