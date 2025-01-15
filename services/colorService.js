@@ -8,9 +8,11 @@ export const colorService = {
   },
 
   setElementColor(colorCode) {
-    if (!this.canvasService?.selectedElement) return;
+    const activeObject = this.canvasService?.canvas?.getActiveObject();
+    if (!activeObject) return;
+    
     const x = toRGB(colorCode);
-    this?.canvasService?.selectedElement[0]?.set('fill', `rgb(${x?.r || 0}, ${x?.g || 0}, ${x?.b || 0})`);
+    activeObject.set('fill', `rgb(${x?.r || 0}, ${x?.g || 0}, ${x?.b || 0})`);
     this.canvasService.saveCanvas();
     this.canvasService.canvas.renderAll();
   },

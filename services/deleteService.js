@@ -6,9 +6,10 @@ export const deleteService = {
   },
 
   deleteSelectedElement() {
-    if (!this.canvasService?.selectedElement || !this.canvasService?.canvas) return;
+    if (!this.canvasService?.canvas) return;
     
-    const selected = this.canvasService.selectedElement;
+    const selected = this.canvasService.canvas.getActiveObject();
+    if (!selected) return;
     
     // Handle both single elements and groups
     if (selected._objects) {
