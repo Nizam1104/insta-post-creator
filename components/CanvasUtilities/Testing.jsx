@@ -1,9 +1,9 @@
 import { Button } from "../ui/button"
-import { shapesService } from "@/services/shapesService"
+import { canvasService } from "@/services/canvasService"
 
 export default function Testing() {
   const handleTesting  = () => {
-    shapesService.addRect()
+    canvasService.addRect()
   }
 
   return (

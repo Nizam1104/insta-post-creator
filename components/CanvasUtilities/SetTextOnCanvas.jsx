@@ -1,6 +1,5 @@
 "use client";
-
-import { textService } from "@/services/textService";
+import { canvasService } from "@/services/canvasService";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -8,7 +7,7 @@ export default function SetTextOnCanvas() {
   const [textValue, setTextValue] = useState("");
 
   const setTextToCanvas = () => {
-    textService.addText(textValue)
+    canvasService.addText(textValue)
   }
 
   return (

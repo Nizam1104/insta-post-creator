@@ -6,7 +6,6 @@ import SetElementColor from "./CanvasUtilities/SetElementColor"
 import SetImageOnCanvas from "./CanvasUtilities/SetImageOnCanvas"
 import SetElementShadow from "./CanvasUtilities/SetElementShadow"
 import SetElementOpacity from "./CanvasUtilities/SetElementOpacity"
-import SetShapesOnCanvas from "./CanvasUtilities/SetShapesOnCanvas"
 
 import Testing from "./CanvasUtilities/Testing"
 
@@ -16,7 +15,6 @@ export default function CanvasConfigurations() {
       <SetCanvasColor />
       <SetTextOnCanvas />
       <SetImageOnCanvas />
-      <SetShapesOnCanvas />
       <Testing />
       <div className="flex flex-col space-y-6">
         <span className="font-semibold text-gray-400">Element properties</span>
