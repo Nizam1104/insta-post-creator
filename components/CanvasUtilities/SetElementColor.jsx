@@ -1,6 +1,7 @@
 "use client"
 
 import { canvasService } from "@/services/canvasService";
+import { colorService } from "@/services/colorService";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
@@ -37,7 +38,7 @@ export default function SetElementColor() {
   };
 
   useEffect(() => {
-    canvasService.setElementColor(color);
+    colorService.setElementColor(color);
     setHexInput(color);
     updateRgbColor(color);
   }, [color]);
@@ -45,7 +46,8 @@ export default function SetElementColor() {
   useEffect(() => {
     const unsubscribe = canvasService.subscribe((selectedElement) => {
       if (selectedElement && selectedElement.length === 1) {
-        setColor(rgbStringToHex(selectedElement[0]?.fill || `rgb(0, 0, 0)`))
+        console.log(selectedElement[0]?.fill, 'fill')
+        // setColor(rgbStringToHex(selectedElement[0]?.fill || `rgb(0, 0, 0)`))
       } else {
         setColor('#000000')
       }
