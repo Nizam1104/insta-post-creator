@@ -46,7 +46,8 @@ export default function SetElementColor() {
   useEffect(() => {
     const unsubscribe = canvasService.subscribe((selectedElement) => {
       if (selectedElement && selectedElement.length === 1) {
-        setColor(rgbStringToHex(selectedElement[0]?.fill || `rgb(0, 0, 0)`))
+        console.log(selectedElement[0]?.fill, 'fill')
+        // setColor(rgbStringToHex(selectedElement[0]?.fill || `rgb(0, 0, 0)`))
       } else {
         setColor('#000000')
       }
