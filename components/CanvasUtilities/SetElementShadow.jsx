@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { canvasService } from "@/services/canvasService";
 import { Button } from "../ui/button";
+import { shadowService } from "@/services/shadowService";
 
 export default function SetElementShadow() {
   const [shadowOptions, setShadowOptions] = useState({
@@ -16,7 +17,7 @@ export default function SetElementShadow() {
     const actualValue = Array.isArray(value) ? value[0] : value;
     const newOptions = { ...shadowOptions, [key]: actualValue };
     setShadowOptions(newOptions);
-    canvasService.setElementShadow(newOptions);
+    shadowService.setElementShadow(newOptions);
   };
 
   const handleRemoveShadow = () => {
@@ -30,7 +31,7 @@ export default function SetElementShadow() {
 
     // Then remove shadow from canvas
     setTimeout(() => {
-      canvasService.removeElementShadow();
+      shadowService.removeElementShadow();
     }, 0);
   };
 
