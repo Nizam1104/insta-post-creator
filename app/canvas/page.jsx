@@ -1,3 +1,4 @@
+import AskAi from "@/components/AskAi"
 import PostCanvas from "../../components/PostCanvas"
 import UndoRedoCanvas from "@/components/CanvasUtilities/UndoRedo"
 
@@ -8,6 +9,7 @@ export default function CanvasPage() {
       {/* <TextEditor /> */}
       <UndoRedoCanvas />
       <PostCanvas />
+      <AskAi />
     </div>
   )
 }

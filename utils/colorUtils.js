@@ -15,7 +15,6 @@ export const rgbToHex = (r, g, b) => {
 
 export const rgbStringToHex = (rgbString) => {
   if (!rgbString) return rgbToHex(0, 0, 0)
-    console.log(rgbString)
   // Extract numbers from rgb string using regex
   const matches = rgbString.match(/\d+/g);
   if (!matches || matches.length !== 3) return null;

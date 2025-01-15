@@ -20,7 +20,7 @@ export default function PrimaryLayout({ children }) {
             </div>
 
             {/* Middle Column */}
-            <div className="w-[50%] bg-gray-800 rounded-lg shadow-sm p-4 h-full">
+            <div className="w-[50%] bg-gray-800 rounded-lg shadow-sm p-4 h-full overflow-y-auto">
               <main className="text-white h-full">{children}</main>
             </div>
 
