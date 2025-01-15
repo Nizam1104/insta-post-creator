@@ -84,11 +84,6 @@ class CanvasService {
     this.notifyObservers();
   }
 
-  removeElementFromCanvas(element) {
-    this.canvas.remove(element);
-    this.canvas.renderAll()
-  }
-
   notifyObservers() {
     this.observers.forEach(callback => callback(this.selectedElement));
   }
