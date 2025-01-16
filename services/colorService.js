@@ -26,3 +26,6 @@ export const colorService = {
     this.canvasService.saveCanvas();
   }
 };
+
+/*
+ */

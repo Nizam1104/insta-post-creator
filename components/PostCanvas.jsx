@@ -19,7 +19,6 @@ const PostCanvas = () => {
 
     return () => {
       if (canvas) {
-        canvasService.clearSelectedElement();
         canvasService.saveCanvas();
       }
     };

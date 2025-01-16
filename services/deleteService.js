@@ -30,7 +30,6 @@ export const deleteService = {
     
     this.canvasService.canvas.discardActiveObject();
     this.canvasService.canvas.renderAll();
-    this.canvasService.clearSelectedElement();
     this.canvasService.saveCanvas();
   }
 }
