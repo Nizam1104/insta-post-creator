@@ -6,17 +6,31 @@ export const shapesService = {
   },
 
   addRect(hollow = false) {
-    if (!this.canvasService?.canvas || !this.canvasService?.fabricModule)
-      return;
+    if (!this.canvasService?.canvas || !this.canvasService?.fabricModule) return;
+
+    const gradient = new this.canvasService.fabricModule.Gradient({
+      type: 'linear',
+      coords: {
+        x1: 0,
+        y1: 0,
+        x2: 100,
+        y2: 100
+      },
+      colorStops: [
+        { offset: 0, color: '#FF0000' },
+        { offset: 0.5, color: '#00FF00' },
+        { offset: 1, color: '#0000FF' }
+      ]
+    });
 
     const rect = new this.canvasService.fabricModule.Rect({
       left: 200,
       top: 100,
       width: 100,
       height: 100,
-      fill: hollow ? "transparent" : "black",
+      fill: hollow ? "transparent" : gradient,
       stroke: "black",
-      strokeWidth: 2,
+      strokeWidth: 0.5,
       angle: 0,
     });
 
@@ -24,6 +38,26 @@ export const shapesService = {
     this.canvasService.canvas.renderAll();
     this.canvasService.saveCanvas();
   },
+
+  // addRect(hollow = false) {
+  //   if (!this.canvasService?.canvas || !this.canvasService?.fabricModule)
+  //     return;
+
+  //   const rect = new this.canvasService.fabricModule.Rect({
+  //     left: 200,
+  //     top: 100,
+  //     width: 100,
+  //     height: 100,
+  //     fill: hollow ? "transparent" : "black",
+  //     stroke: "black",
+  //     strokeWidth: 0.5,
+  //     angle: 0,
+  //   });
+
+  //   this.canvasService.canvas.add(rect);
+  //   this.canvasService.canvas.renderAll();
+  //   this.canvasService.saveCanvas();
+  // },
 
   addCircle(hollow = false) {
     if (!this.canvasService?.canvas || !this.canvasService?.fabricModule)
@@ -35,7 +69,7 @@ export const shapesService = {
       radius: 50,
       fill: hollow ? "transparent" : "black",
       stroke: "black",
-      strokeWidth: 2,
+      strokeWidth: 0.5,
     });
 
     this.canvasService.canvas.add(circle);
@@ -54,7 +88,7 @@ export const shapesService = {
         top: 100,
         fill: hollow ? "transparent" : "black",
         stroke: "black",
-        strokeWidth: 2,
+        strokeWidth: 0.5,
       }
     );
 
@@ -74,7 +108,7 @@ export const shapesService = {
       height: 100,
       fill: hollow ? "transparent" : "black",
       stroke: "black",
-      strokeWidth: 2,
+      strokeWidth: 0.5,
     });
 
     this.canvasService.canvas.add(triangle);
@@ -88,7 +122,7 @@ export const shapesService = {
 
     const line = new this.canvasService.fabricModule.Line([50, 100, 250, 100], {
       stroke: "black",
-      strokeWidth: 2,
+      strokeWidth: 0.5,
       fill: hollow ? "transparent" : "black",
     });
 
@@ -108,7 +142,7 @@ export const shapesService = {
         top: 100,
         fill: hollow ? "transparent" : "black",
         stroke: "black",
-        strokeWidth: 2,
+        strokeWidth: 0.5,
       }
     );
 
@@ -123,7 +157,7 @@ export const shapesService = {
 
     const line = new this.canvasService.fabricModule.Line([50, 100, 250, 100], {
       stroke: "black",
-      strokeWidth: 2,
+      strokeWidth: 0.5,
     });
 
     this.canvasService.canvas.add(line);
@@ -142,7 +176,7 @@ export const shapesService = {
       top: 100,
       fill: hollow ? "transparent" : "black",
       stroke: "black",
-      strokeWidth: 2,
+      strokeWidth: 0.5,
     });
 
     this.canvasService.canvas.add(ellipse);
@@ -158,7 +192,7 @@ export const shapesService = {
       "M 0 0 L 100 100 L 200 50 Z",
       {
         stroke: "black",
-        strokeWidth: 2,
+        strokeWidth: 0.5,
         fill: hollow ? "transparent" : "black",
         selectable: true,
         hasControls: true,
@@ -196,7 +230,7 @@ export const shapesService = {
           ],
           {
             stroke: "black",
-            strokeWidth: 2,
+            strokeWidth: 0.5,
             selectable: false,
             evented: false, // Ensure the line is not interactive
           }
@@ -242,7 +276,7 @@ export const shapesService = {
   
       const curve = new this.canvasService.fabricModule.Path(pathString, {
         stroke: "black",
-        strokeWidth: 2,
+        strokeWidth: 0.5,
         fill: "transparent",
         selectable: true,
         hasControls: true,
@@ -306,7 +340,7 @@ export const shapesService = {
       // Create and add preview curve
       previewCurve = new this.canvasService.fabricModule.Path(pathString, {
         stroke: "blue",
-        strokeWidth: 2,
+        strokeWidth: 0.5,
         fill: "transparent",
         selectable: false,
         evented: false
@@ -444,7 +478,7 @@ export const shapesService = {
   
       const curve = new this.canvasService.fabricModule.Path(pathString, {
         stroke: "black",
-        strokeWidth: 2,
+        strokeWidth: 0.5,
         fill: "transparent",
         selectable: true,
         hasControls: true,
