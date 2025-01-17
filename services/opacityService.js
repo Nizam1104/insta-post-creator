@@ -6,26 +6,30 @@ export const opacityService = {
   },
 
   setElementOpacity(opacity) {
-    if (!this.canvasService?.selectedElement) return;
+    const activeObject = this.canvasService?.canvas?.getActiveObject();
+    if (!activeObject) return;
     
     // Handle both single elements and groups
-    if (this.canvasService.selectedElement._objects) {
+    if (activeObject._objects) {
       // If it's a group, set opacity for all objects in the group
-      this.canvasService.selectedElement._objects.forEach(element => {
+      activeObject._objects.forEach(element => {
         element.set('opacity', opacity);
-        element.setCoords(); // Add this line
+        element.setCoords();
       });
-      this.canvasService.selectedElement.set('opacity', opacity);
-      this.canvasService.selectedElement.setCoords();
-    } else {
+      activeObject.set('opacity', opacity);
+      activeObject.setCoords();
+    } else if (Array.isArray(activeObject)) {
       // If it's multiple selected elements
-      this.canvasService.selectedElement.forEach(element => {
+      activeObject.forEach(element => {
         element.set('opacity', opacity);
-        element.setCoords(); // Add this line
+        element.setCoords();
       });
+    } else {
+      // Single element
+      activeObject.set('opacity', opacity);
+      activeObject.setCoords();
     }
     
-    // Remove setTimeout and render immediately
     this.canvasService.saveCanvas();
     this.canvasService.canvas.renderAll();
   }

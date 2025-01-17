@@ -6,7 +6,8 @@ export const shadowService = {
   },
 
   setElementShadow(options) {
-    if (!this.canvasService?.selectedElement) return;
+    const activeObject = this.canvasService?.canvas?.getActiveObject();
+    if (!activeObject) return;
     
     const shadow = new this.canvasService.fabricModule.Shadow({
       color: options.color || 'rgba(0,0,0,0.5)',
@@ -16,17 +17,20 @@ export const shadowService = {
     });
 
     // Handle both single elements and groups
-    if (this.canvasService.selectedElement._objects) {
+    if (activeObject._objects) {
       // If it's a group, set shadow for all objects in the group
-      this.canvasService.selectedElement._objects.forEach(element => {
+      activeObject._objects.forEach(element => {
         element.set('shadow', shadow);
       });
-      this.canvasService.selectedElement.set('shadow', shadow);
-    } else {
+      activeObject.set('shadow', shadow);
+    } else if (Array.isArray(activeObject)) {
       // If it's multiple selected elements
-      this.canvasService.selectedElement.forEach(element => {
+      activeObject.forEach(element => {
         element.set('shadow', shadow);
       });
+    } else {
+      // Single element
+      activeObject.set('shadow', shadow);
     }
     
     setTimeout(() => {
@@ -36,20 +40,24 @@ export const shadowService = {
   },
 
   removeElementShadow() {
-    if (!this.canvasService?.selectedElement) return;
+    const activeObject = this.canvasService?.canvas?.getActiveObject();
+    if (!activeObject) return;
     
     // Handle both single elements and groups
-    if (this.canvasService.selectedElement._objects) {
+    if (activeObject._objects) {
       // If it's a group, remove shadow from all objects in the group
-      this.canvasService.selectedElement._objects.forEach(element => {
+      activeObject._objects.forEach(element => {
         element.set('shadow', null);
       });
-      this.canvasService.selectedElement.set('shadow', null);
-    } else {
+      activeObject.set('shadow', null);
+    } else if (Array.isArray(activeObject)) {
       // If it's multiple selected elements
-      this.canvasService.selectedElement.forEach(element => {
+      activeObject.forEach(element => {
         element.set('shadow', null);
       });
+    } else {
+      // Single element
+      activeObject.set('shadow', null);
     }
   
     setTimeout(() => {

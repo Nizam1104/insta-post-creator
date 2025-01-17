@@ -7,13 +7,11 @@ import { shapesService } from "./shapesService";
 import { textService } from "./textService";
 import { zIndexService } from "./zIndexService";
 
-
 import { testServices } from "./testServices";
 
 class CanvasService {
   canvas = null;
   fabricModule = null;
-  selectedElement = null;
   history = [];
   historyIndex = -1;
   maxHistoryLength = 20;
@@ -23,35 +21,32 @@ class CanvasService {
     this.canvas = canvas;
     this.fabricModule = fabricModule;
 
-    colorService.initialize(this)
-    shadowService.initialize(this)
-    opacityService.initialize(this)
-    imageService.initialize(this)
-    deleteService.initialize(this)
-    shapesService.initialize(this)
-    textService.initialize(this)
-    zIndexService.initialize(this)
-    testServices.initialize(this)
-
+    colorService.initialize(this);
+    shadowService.initialize(this);
+    opacityService.initialize(this);
+    imageService.initialize(this);
+    deleteService.initialize(this);
+    shapesService.initialize(this);
+    textService.initialize(this);
+    zIndexService.initialize(this);
+    testServices.initialize(this);
 
     this.canvas.on({
-      'selection:updated': (e) => this.HandleElement(e),
-      'selection:created': (e) => this.HandleElement(e),
-      'selection:cleared': () => {
-        this.clearSelectedElement()
-      },
-      'object:modified': () => {
+      "selection:updated": () => this.notifyObservers(),
+      "selection:created": () => this.notifyObservers(),
+      "selection:cleared": () => this.notifyObservers(),
+      "object:modified": () => {
         this.debouncedSave();
         this.debouncedAddToHistory();
       },
-      'object:added': () => {
+      "object:added": () => {
         this.debouncedSave();
         this.debouncedAddToHistory();
       },
-      'object:removed': () => {
+      "object:removed": () => {
         this.debouncedSave();
         this.debouncedAddToHistory();
-      }
+      },
     });
 
     this.loadCanvas();
@@ -63,40 +58,37 @@ class CanvasService {
   subscribe(callback) {
     this.observers.push(callback);
     return () => {
-      this.observers = this.observers.filter(observer => observer !== callback);
+      this.observers = this.observers.filter(
+        (observer) => observer !== callback
+      );
     };
   }
 
   constructor() {
     this.debouncedSave = this.debounce(this.saveCanvas.bind(this), 100);
-    this.debouncedAddToHistory = this.debounce(this.addToHistory.bind(this), 100);
+    this.debouncedAddToHistory = this.debounce(
+      this.addToHistory.bind(this),
+      100
+    );
   }
 
   debounce(func, wait) {
     let timeout;
-    return function(...args) {
+    return function (...args) {
       clearTimeout(timeout);
       timeout = setTimeout(() => func.apply(this, args), wait);
     };
   }
 
-  HandleElement(e) {
-    this.selectedElement = e.selected || [];
-    this.notifyObservers();
-  }
-
-  clearSelectedElement() {
-    this.selectedElement = [];
-    this.notifyObservers();
-  }
-
   removeElementFromCanvas(element) {
     this.canvas.remove(element);
-    this.canvas.renderAll()
+    this.canvas.renderAll();
   }
 
   notifyObservers() {
-    this.observers.forEach(callback => callback(this.selectedElement));
+    const activeObject = this.canvas.getActiveObject();
+    const selection = activeObject ? [activeObject] : [];
+    this.observers.forEach((callback) => callback(selection));
   }
 
   saveCanvas() {
@@ -113,7 +105,7 @@ class CanvasService {
 
     if (savedCanvas) {
       this.canvas.loadFromJSON(JSON.parse(savedCanvas));
-      const color = localStorage.getItem('postCanvasBgColour') || '#FFFFFF';
+      const color = localStorage.getItem("postCanvasBgColour") || "#FFFFFF";
       this.canvas.backgroundColor = color;
 
       if (savedHistory) {
@@ -129,118 +121,42 @@ class CanvasService {
 
   loadFromJson(jsonObj) {
     // Parse the JSON object if it's a string
-    const parsedObj = typeof jsonObj === 'string' ? JSON.parse(jsonObj) : jsonObj;
-    
+    const parsedObj =
+      typeof jsonObj === "string" ? JSON.parse(jsonObj) : jsonObj;
+
     // Create a new canvas state object with the parsed elements
     const canvasState = {
       objects: parsedObj,
-      background: localStorage.getItem('postCanvasBgColour') || '#FFFFFF'
+      background: localStorage.getItem("postCanvasBgColour") || "#FFFFFF",
     };
 
     // Load the canvas with the new state
     this.canvas.loadFromJSON(canvasState, () => {
       // Set background color
       this.canvas.backgroundColor = canvasState.background;
-      
+
       // Render all elements
       this.canvas.renderAll();
-      
+
       // Optional: Adjust canvas dimensions if needed
       this.canvas.setDimensions({
         width: 500,
-        height: 500
+        height: 500,
       });
     });
-  }
-
-  loadFromElements(elements) {
-    if (!this.canvas || !Array.isArray(elements)) return;
-
-    // Clear existing canvas first
-    this.canvas.clear();
-
-    // Set canvas dimensions to Instagram standard
-    this.canvas.setDimensions({
-      width: 500,
-      height: 500
-    });
-
-    // Set background color from localStorage or default
-    this.canvas.backgroundColor = localStorage.getItem('postCanvasBgColour') || '#FFFFFF';
-
-    // Create a promise for each element to ensure proper loading order
-    const elementPromises = elements.map(element => {
-      return new Promise((resolve, reject) => {
-        try {
-          switch (element.type) {
-            case 'text':
-              const text = new this.fabricModule.Text(element.content, {
-                ...element.properties,
-                originX: 'center',
-                originY: 'center'
-              });
-              this.canvas.add(text);
-              resolve();
-              break;
-
-            case 'image':
-              this.fabricModule.Image.fromURL(element.src, img => {
-                img.set({
-                  ...element.properties,
-                  originX: 'center',
-                  originY: 'center'
-                });
-                this.canvas.add(img);
-                resolve();
-              }, {
-                crossOrigin: 'anonymous'
-              });
-              break;
-
-            case 'rect':
-              const rect = new this.fabricModule.Rect({
-                ...element.properties,
-                originX: 'center',
-                originY: 'center'
-              });
-              this.canvas.add(rect);
-              resolve();
-              break;
-
-            default:
-              console.warn(`Unsupported element type: ${element.type}`);
-              resolve();
-              break;
-          }
-        } catch (error) {
-          console.error(`Error loading element:`, error);
-          reject(error);
-        }
-      });
-    });
-
-    // Wait for all elements to load before rendering
-    Promise.all(elementPromises)
-      .then(() => {
-        this.canvas.renderAll();
-        this.addToHistory();
-      })
-      .catch(error => {
-        console.error('Error loading elements:', error);
-      });
   }
 
   addToHistory() {
     if (!this.canvas) return;
-    
+
     if (this.historyIndex < this.history.length - 1) {
       this.history = this.history.slice(0, this.historyIndex + 1);
     }
-    
+
     const state = this.canvas.toJSON();
     this.history.push(state);
     this.historyIndex++;
-    
+
     if (this.history.length > this.maxHistoryLength) {
       this.history.shift();
       this.historyIndex--;
@@ -264,18 +180,18 @@ class CanvasService {
 
   loadStateFromHistory() {
     if (!this.canvas || this.historyIndex < 0) return;
-    
+
     const state = this.history[this.historyIndex];
     const currentBgColor = this.canvas.backgroundColor;
-    
+
     this.canvas.loadFromJSON(state);
     setTimeout(() => {
       this.canvas.backgroundColor = currentBgColor;
       this.canvas.renderAll();
-      
+
       this.saveCanvas();
       localStorage.setItem("canvasHistoryIndex", this.historyIndex);
-    }, 30)
+    }, 30);
   }
 }
 
