@@ -48,7 +48,6 @@ export default function SetElementColor() {
   const handleHexSubmit = (e) => {
     e.preventDefault();
     if (validateHex(hexInput)) {
-      console.log(hexInput, 'hex input')
       setColor(hexInput);
       updateRgbColor(hexInput);
       applyColorToSelected(hexInput);

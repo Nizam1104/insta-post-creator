@@ -167,11 +167,7 @@ export default function SetElementColor() {
             type="color"
             onChange={(e) => setColor(e.target.value)}
             value={color}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          />
-          <div
-            className="absolute inset-0"
-            style={{ backgroundColor: color }}
+            className="absolute inset-0 w-full h-full -p-2 cursor-pointer"
           />
         </div>
         <div className="flex-grow" />
@@ -364,11 +360,7 @@ export default function SetElementColor() {
                               e.target.value
                             )
                           }
-                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                        />
-                        <div
-                          className="absolute inset-0"
-                          style={{ backgroundColor: stop.color }}
+                          className="absolute inset-0 w-full h-full -p-2 cursor-pointer"
                         />
                       </div>
                     </div>

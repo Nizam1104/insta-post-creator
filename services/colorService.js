@@ -33,11 +33,28 @@ export const colorService = {
   },
 
   setCanvasColor(color) {
-    if (this.canvasService?.canvas) {
+    if (!this.canvasService?.canvas) return;
+
+    if (typeof color === 'string') {
+      // Handle solid color
       this.canvasService.canvas.backgroundColor = color;
-      this.canvasService.canvas.renderAll();
       localStorage.setItem('postCanvasBgColour', color);
+    } else if (typeof color === 'object' && color.colorStops) {
+      // Handle gradient
+      const gradient = new this.canvasService.fabricModule.Gradient({
+        type: color.type || 'linear',
+        coords: color.coords || {
+          x1: 0,
+          y1: 0,
+          x2: this.canvasService.canvas.width,
+          y2: this.canvasService.canvas.height
+        },
+        colorStops: color.colorStops
+      });
+      this.canvasService.canvas.backgroundColor = gradient;
     }
+
+    this.canvasService.canvas.renderAll();
     this.canvasService.saveCanvas();
   },
 

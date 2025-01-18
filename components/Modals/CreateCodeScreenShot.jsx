@@ -150,9 +150,7 @@ export default function CreateCodeScreenShot() {
               Create Screenshot from code
             </DialogTitle>
             <DialogClose>
-              <Button size="sm">
-                Close
-              </Button>
+              <span className="px-2 py-1 bg-gray-200 font-semibold rounded text-gray-600">Close</span>
             </DialogClose>
             </div>
 
