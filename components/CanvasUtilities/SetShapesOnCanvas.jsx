@@ -40,6 +40,10 @@ export default function SetShapesOnCanvas() {
     shapesService.addPolyLine()
   }
 
+  const addEllipse = () => {
+    shapesService.addEllipse()
+  }
+
   return (
     <div className="bg-gray-900/80 backdrop-blur-sm p-4 rounded-xl border border-gray-800 flex flex-col space-y-4">
       <h3 className="text-base font-semibold text-gray-400">Add Shapes and curves</h3>
@@ -97,6 +101,14 @@ export default function SetShapesOnCanvas() {
             className="w-fit h-auto rounded-lg hover:bg-gray-800/50 transition-all duration-200 hover:scale-105"
           >
             <span className="text-gray-400 text-xs font-semibold">Add multi point curve</span>
+          </Button>
+
+          <Button
+            onClick={() => addEllipse()}
+            variant="ghost"
+            className="w-fit h-auto rounded-lg hover:bg-gray-800/50 transition-all duration-200 hover:scale-105"
+          >
+            <span className="text-gray-400 text-xs font-semibold">Ellipse</span>
           </Button>
 
           <Button

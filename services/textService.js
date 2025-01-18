@@ -8,7 +8,7 @@ export const textService = {
   addText(textValue) {
     if (!this.canvasService?.canvas || !this.canvasService?.fabricModule || !textValue) return;
 
-    const textEle = new this.canvasService.fabricModule.Text(textValue, {
+    const textEle = new this.canvasService.fabricModule.IText(textValue, {
       left: 100,
       top: 100,
       fontSize: 40,
@@ -21,7 +21,7 @@ export const textService = {
 
   addTextWithPosition(textObj) {
     if (!this.canvasService?.canvas || !this.canvasService?.fabricModule || !textObj) return;
-    const textEle = new this.canvasService.fabricModule.Text(textObj.content, {
+    const textEle = new this.canvasService.fabricModule.IText(textObj.content, {
       left: textObj.position.x,
       top: textObj.position.y,
       fontSize: 40,

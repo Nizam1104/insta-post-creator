@@ -5,30 +5,36 @@ export const shapesService = {
     this.canvasService = canvasService;
   },
 
-  addRect(hollow = false) {
-    if (!this.canvasService?.canvas || !this.canvasService?.fabricModule) return;
+  addEllipse(hollow = false) {
+    if (!this.canvasService?.canvas || !this.canvasService?.fabricModule)
+      return;
 
-    const gradient = new this.canvasService.fabricModule.Gradient({
-      type: 'linear',
-      coords: {
-        x1: 0,
-        y1: 0,
-        x2: 100,
-        y2: 100
-      },
-      colorStops: [
-        { offset: 0, color: '#FF0000' },
-        { offset: 0.5, color: '#00FF00' },
-        { offset: 1, color: '#0000FF' }
-      ]
+    const ellipse = new this.canvasService.fabricModule.Ellipse({
+      left: 200,
+      top: 100,
+      rx: 75,  // horizontal radius
+      ry: 50,  // vertical radius
+      fill: hollow ? "transparent" : "black",
+      stroke: "black",
+      strokeWidth: 0.5,
+      angle: 0,
     });
+
+    this.canvasService.canvas.add(ellipse);
+    this.canvasService.canvas.renderAll();
+    this.canvasService.saveCanvas();
+  },
+
+  addRect(hollow = false) {
+    if (!this.canvasService?.canvas || !this.canvasService?.fabricModule)
+      return;
 
     const rect = new this.canvasService.fabricModule.Rect({
       left: 200,
       top: 100,
       width: 100,
       height: 100,
-      fill: hollow ? "transparent" : gradient,
+      fill: hollow ? "transparent" : "black",
       stroke: "black",
       strokeWidth: 0.5,
       angle: 0,
@@ -38,26 +44,6 @@ export const shapesService = {
     this.canvasService.canvas.renderAll();
     this.canvasService.saveCanvas();
   },
-
-  // addRect(hollow = false) {
-  //   if (!this.canvasService?.canvas || !this.canvasService?.fabricModule)
-  //     return;
-
-  //   const rect = new this.canvasService.fabricModule.Rect({
-  //     left: 200,
-  //     top: 100,
-  //     width: 100,
-  //     height: 100,
-  //     fill: hollow ? "transparent" : "black",
-  //     stroke: "black",
-  //     strokeWidth: 0.5,
-  //     angle: 0,
-  //   });
-
-  //   this.canvasService.canvas.add(rect);
-  //   this.canvasService.canvas.renderAll();
-  //   this.canvasService.saveCanvas();
-  // },
 
   addCircle(hollow = false) {
     if (!this.canvasService?.canvas || !this.canvasService?.fabricModule)
