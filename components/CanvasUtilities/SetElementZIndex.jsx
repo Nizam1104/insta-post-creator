@@ -2,7 +2,7 @@
 
 import { zIndexService } from '@/services/zIndexService';
 import { Button } from '../ui/button';
-import { FaInfoCircle } from 'react-icons/fa';
+import { FaInfoCircle, FaArrowUp, FaArrowDown, FaLayerGroup, FaObjectGroup } from 'react-icons/fa';
 import { useState } from 'react';
 
 export default function SetElementZIndex() {
@@ -26,14 +26,20 @@ export default function SetElementZIndex() {
   };
 
   return (
-    <div className="flex flex-col space-y-2 bg-gray-900 p-2 rounded-md">
+    <div className="flex justify-center items-center gap-x-4 flex-wrap space-y-2 bg-gray-900 p-2 rounded-md">
       <Button 
         onClick={handleBringToFront}
-        className="w-full flex items-center justify-between"
+        className="flex items-center justify-between w-fit min-w-[150px]"
         onMouseEnter={() => setHoveredButton('bringToFront')}
         onMouseLeave={() => setHoveredButton('')}
       >
-        Max Z-Index
+        <span className='text-xs font-semibold text-gray-400 flex space-x-2 items-center'>
+          <span>Max Z-Index</span>
+          <div className="flex flex-col -space-y-1.5">
+            <FaArrowUp size={10} className="text-gray-300" />
+            <FaArrowUp size={10} className="text-gray-300" />
+          </div>
+        </span>
         {hoveredButton === 'bringToFront' && (
           <div 
             className="relative"
@@ -51,11 +57,16 @@ export default function SetElementZIndex() {
       </Button>
       <Button 
         onClick={handleBringForward}
-        className="w-full flex items-center justify-between"
+        className="flex items-center justify-between w-fit min-w-[150px]"
         onMouseEnter={() => setHoveredButton('bringForward')}
         onMouseLeave={() => setHoveredButton('')}
       >
-        Z-Index++
+        <span className='text-xs font-semibold text-gray-400 flex space-x-2 items-center'>
+          <span>Z-Index</span>
+          <div className="flex flex-col -space-y-1.5">
+            <FaArrowUp size={10} className="text-gray-300" />
+          </div>
+        </span>
         {hoveredButton === 'bringForward' && (
           <div 
             className="relative"
@@ -73,11 +84,17 @@ export default function SetElementZIndex() {
       </Button>
       <Button
         onClick={handleSendToBack}
-        className="w-full flex items-center justify-between"
+        className="flex items-center justify-between w-fit min-w-[150px]"
         onMouseEnter={() => setHoveredButton('sendToBack')}
         onMouseLeave={() => setHoveredButton('')}
       >
-        Min Z-Index
+        <span className='text-xs font-semibold text-gray-400 flex space-x-2 items-center'>
+          <span>Min Z-Index</span>
+          <div className="flex flex-col -space-y-1.5">
+            <FaArrowDown size={10} className="text-gray-300" />
+            <FaArrowDown size={10} className="text-gray-300" />
+          </div>
+        </span>
         {hoveredButton === 'sendToBack' && (
           <div 
             className="relative"
@@ -95,11 +112,16 @@ export default function SetElementZIndex() {
       </Button>
       <Button
         onClick={handleSendBackward}
-        className="w-full flex items-center justify-between"
+        className="flex items-center justify-between w-fit min-w-[150px]"
         onMouseEnter={() => setHoveredButton('sendBackward')}
         onMouseLeave={() => setHoveredButton('')}
       >
-        Z-Index--
+        <span className='text-xs font-semibold text-gray-400 flex space-x-2 items-center'>
+          <span>Z-Index--</span>
+          <div className="flex flex-col -space-y-1.5">
+            <FaArrowDown size={10} className="text-gray-300" />
+          </div>
+        </span>
         {hoveredButton === 'sendBackward' && (
           <div 
             className="relative"
