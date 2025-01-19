@@ -16,7 +16,7 @@ export const shapesService = {
       ry: 50,
       fill: hollow ? "transparent" : "black",
       stroke: "black",
-      strokeWidth: 0.5,
+      strokeWidth: hollow ? 0.5 : 0,
       angle: 0,
     });
 
@@ -36,7 +36,7 @@ export const shapesService = {
       height: 100,
       fill: hollow ? "transparent" : "black",
       stroke: "black",
-      strokeWidth: 0.5,
+      strokeWidth: hollow ? 0.5 : 0,
       angle: 0,
     });
 
@@ -55,7 +55,7 @@ export const shapesService = {
       radius: 50,
       fill: hollow ? "transparent" : "black",
       stroke: "black",
-      strokeWidth: 0.5,
+      strokeWidth: hollow ? 0.5 : 0,
     });
 
     this.canvasService.canvas.add(circle);
@@ -74,7 +74,7 @@ export const shapesService = {
         top: 100,
         fill: hollow ? "transparent" : "black",
         stroke: "black",
-        strokeWidth: 0.5,
+        strokeWidth: hollow ? 0.5 : 0,
       }
     );
 
@@ -94,7 +94,7 @@ export const shapesService = {
       height: 100,
       fill: hollow ? "transparent" : "black",
       stroke: "black",
-      strokeWidth: 0.5,
+      strokeWidth: hollow ? 0.5 : 0,
     });
 
     this.canvasService.canvas.add(triangle);
@@ -128,7 +128,7 @@ export const shapesService = {
         top: 100,
         fill: hollow ? "transparent" : "black",
         stroke: "black",
-        strokeWidth: 0.5,
+        strokeWidth: hollow ? 0.5 : 0,
       }
     );
 
@@ -162,7 +162,7 @@ export const shapesService = {
       top: 100,
       fill: hollow ? "transparent" : "black",
       stroke: "black",
-      strokeWidth: 0.5,
+      strokeWidth: hollow ? 0.5 : 0,
     });
 
     this.canvasService.canvas.add(ellipse);
