@@ -490,12 +490,65 @@ export const shapesService = {
       this.canvasService.canvas.add(curve);
       this.canvasService.canvas.requestRenderAll();
       this.canvasService.saveCanvas();
-    };
+    }
   
     // Set up event listeners
     this.canvasService.canvas.on("mouse:down", handleMouseDown);
     this.canvasService.canvas.on("mouse:move", handleMouseMove);
     this.canvasService.canvas.on("mouse:up", handleMouseUp);
     this.canvasService.canvas.on("mouse:dblclick", handleDoubleClick);
+  },
+
+  setCornerRadius(radius) {
+    if (!this.canvasService?.canvas) return;
+
+    const activeObject = this.canvasService.canvas.getActiveObject();
+    if (!activeObject) return;
+
+    // Handle different shape types
+    if (activeObject.type === 'rect') {
+      activeObject.set({
+        rx: radius,
+        ry: radius
+      });
+    } else if (activeObject.type === 'path') {
+      // For paths, we need to modify the path commands
+      const path = activeObject.path;
+      const newPath = path.map((command, index) => {
+        if (command[0] === 'L' && index > 0 && path[index - 1][0] === 'L') {
+          // Get previous, current and next points
+          const prevPoint = path[index - 1].slice(-2);
+          const currPoint = command.slice(-2);
+          const nextPoint = path[index + 1]?.slice(-2);
+
+          if (nextPoint) {
+            // Calculate control points for rounded corner
+            const control1 = [
+              prevPoint[0] + (currPoint[0] - prevPoint[0]) * 0.5,
+              prevPoint[1] + (currPoint[1] - prevPoint[1]) * 0.5
+            ];
+            const control2 = [
+              currPoint[0] + (nextPoint[0] - currPoint[0]) * 0.5,
+              currPoint[1] + (nextPoint[1] - currPoint[1]) * 0.5
+            ];
+            
+            // Replace line with curve
+            return ['C', ...control1, ...control2, ...currPoint];
+          }
+        }
+        return command;
+      });
+
+      activeObject.set({ path: newPath });
+    } else if (activeObject.type === 'polygon') {
+      // For polygons, we can use fabric's corner style
+      activeObject.set({
+        cornerStyle: 'circle',
+        cornerSize: radius * 2
+      });
+    }
+
+    this.canvasService.canvas.requestRenderAll();
+    this.canvasService.saveCanvas();
   }
 };

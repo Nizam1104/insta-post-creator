@@ -9,6 +9,7 @@ import { zIndexService } from "./zIndexService";
 import { canvasEventsService } from "./canvasEventsService";
 import { dimensionService } from "./dimensionService";
 import { drawingModeService } from "./drawingModeService";
+import { canvasDownloadService } from "./canvasDownloadService";
 
 import { testServices } from "./testServices";
 
@@ -35,6 +36,7 @@ class CanvasService {
     canvasEventsService.initialize(this);
     dimensionService.initialize(this);
     drawingModeService.initialize(this);
+    canvasDownloadService.initialize(this);
 
     testServices.initialize(this);
 

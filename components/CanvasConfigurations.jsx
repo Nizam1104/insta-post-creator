@@ -9,10 +9,11 @@ import SetElementOpacity from "./CanvasUtilities/SetElementOpacity"
 import SetShapesOnCanvas from "./CanvasUtilities/SetShapesOnCanvas"
 import SetElementZIndex from "./CanvasUtilities/SetElementZIndex"
 import CreateCodeScreenShot from "./Modals/CreateCodeScreenShot"
-
-import Testing from "./CanvasUtilities/Testing"
+import SetCornerRadius from "./CanvasUtilities/SetCornerRadius"
 import SetDimensions from "./CanvasUtilities/SetDimensions"
 import DrawingModeConfig from "./CanvasUtilities/DrawingModeConfigs"
+
+import Testing from "./CanvasUtilities/Testing"
 
 export default function CanvasConfigurations() {
   return (
@@ -29,6 +30,7 @@ export default function CanvasConfigurations() {
         <SetElementColor />
         <SetDimensions />
         <SetElementOpacity />
+        <SetCornerRadius />
         <SetElementShadow />
       </div>
       <details className="group">

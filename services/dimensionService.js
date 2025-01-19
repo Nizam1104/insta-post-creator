@@ -61,7 +61,6 @@ export const dimensionService = {
 
   getDimensions() {
     const activeObject = this.canvasService?.canvas?.getActiveObject();
-    console.log('active obj', activeObject)
     if (!activeObject) return null;
     
     return {
