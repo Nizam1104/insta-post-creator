@@ -55,7 +55,7 @@ export default function SetElementColor() {
 
   const changeRgbColor = (e) => {
     const { name, value } = e.target;
-    const newRgbColor = { ...rgbColor, [name]: parseInt(value, 10) };
+    const newRgbColor = { ...rgbColor, [name]: parseInt(value || 0, 10) };
     setRgbColor(newRgbColor);
     const hexColor = rgbToHex(newRgbColor.r, newRgbColor.g, newRgbColor.b);
     setColor(hexColor);
@@ -63,17 +63,16 @@ export default function SetElementColor() {
 
   const handleGradientStopChange = (index, field, value) => {
     const newStops = [...gradientStops];
-    newStops[index] = { ...newStops[index], [field]: value };
+    newStops[index] = { ...newStops[index], [field]: value || "" };
     setGradientStops(newStops);
   };
 
   const handleGradientCoordChange = (field, value) => {
-    setGradientCoords((prev) => ({ ...prev, [field]: parseFloat(value) || 0 }));
+    setGradientCoords((prev) => ({ ...prev, [field]: parseFloat(value || 0) }));
   };
 
   const handleGradientTypeChange = (value) => {
     setGradientType(value);
-    // If switching to linear gradient, set default linear coords
     if (value === "linear") {
       setGradientCoords({
         x1: 0,
@@ -84,7 +83,6 @@ export default function SetElementColor() {
         r2: 100,
       });
     }
-    // If switching to radial gradient, set default radial coords
     else if (value === "radial") {
       setGradientCoords({
         x1: 50,
@@ -129,14 +127,11 @@ export default function SetElementColor() {
           setIsGradient(true);
           setGradientType(element.fill.type);
           setGradientStops(element.fill.colorStops);
-          // Only set coords if they exist, otherwise use defaults
           if (element.fill.coords) {
             setGradientCoords({
               ...element.fill.coords,
               r1: element.fill.coords.r1 || 0,
-              r2:
-                element.fill.coords.r2 ||
-                (element.fill.type === "radial" ? 50 : 100),
+              r2: element.fill.coords.r2 || (element.fill.type === "radial" ? 50 : 100),
             });
           } else {
             setGradientCoords(
@@ -146,7 +141,8 @@ export default function SetElementColor() {
             );
           }
         } else {
-          setColor(rgbStringToHex(selectedElements[0]?.fill || `rgb(0, 0, 0)`));
+          const fillColor = selectedElements[0]?.fill || `rgb(0, 0, 0)`;
+          setColor(rgbStringToHex(fillColor));
         }
       } else {
         setColor("#000000");
@@ -166,7 +162,7 @@ export default function SetElementColor() {
           <Input
             type="color"
             onChange={(e) => setColor(e.target.value)}
-            value={color}
+            value={color || "#000000"}
             className="absolute inset-0 w-full h-full -p-2 cursor-pointer"
           />
         </div>
@@ -214,7 +210,7 @@ export default function SetElementColor() {
                 <div className="relative flex-1">
                   <Input
                     type="text"
-                    value={hexInput}
+                    value={hexInput || ""}
                     onChange={(e) => setHexInput(e.target.value)}
                     placeholder="#FFFFFF"
                     className="w-full pl-8"
@@ -243,7 +239,7 @@ export default function SetElementColor() {
                       <Input
                         type="number"
                         name={channel}
-                        value={rgbColor[channel]}
+                        value={rgbColor[channel] || 0}
                         onChange={changeRgbColor}
                         className="w-full"
                         min="0"
@@ -293,7 +289,7 @@ export default function SetElementColor() {
                       </Label>
                       <Input
                         type="number"
-                        value={gradientCoords[coord]}
+                        value={gradientCoords[coord] || 0}
                         onChange={(e) =>
                           handleGradientCoordChange(coord, e.target.value)
                         }
@@ -310,7 +306,7 @@ export default function SetElementColor() {
                           </Label>
                           <Input
                             type="number"
-                            value={gradientCoords[radius]}
+                            value={gradientCoords[radius] || 0}
                             onChange={(e) =>
                               handleGradientCoordChange(radius, e.target.value)
                             }
@@ -331,7 +327,7 @@ export default function SetElementColor() {
                       <div className="relative flex-1">
                         <Input
                           type="number"
-                          value={stop.offset}
+                          value={stop.offset || 0}
                           onChange={(e) =>
                             handleGradientStopChange(
                               index,
@@ -352,7 +348,7 @@ export default function SetElementColor() {
                       <div className="relative w-8 h-8 rounded-md overflow-hidden shadow-sm">
                         <Input
                           type="color"
-                          value={stop.color}
+                          value={stop.color || "#000000"}
                           onChange={(e) =>
                             handleGradientStopChange(
                               index,

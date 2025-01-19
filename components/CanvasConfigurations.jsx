@@ -11,19 +11,23 @@ import SetElementZIndex from "./CanvasUtilities/SetElementZIndex"
 import CreateCodeScreenShot from "./Modals/CreateCodeScreenShot"
 
 import Testing from "./CanvasUtilities/Testing"
+import SetDimensions from "./CanvasUtilities/SetDimensions"
+import DrawingModeConfig from "./CanvasUtilities/DrawingModeConfigs"
 
 export default function CanvasConfigurations() {
   return (
     <div className="flex flex-col space-y-6 text-white">
       <SetCanvasColor />
       <SetTextOnCanvas />
-      <SetImageOnCanvas />
       <SetShapesOnCanvas />
+      <SetImageOnCanvas />
+      <DrawingModeConfig />
       <SetElementZIndex />
       <Testing />
       <div className="flex flex-col space-y-6">
         <span className="font-semibold text-gray-400">Element properties</span>
         <SetElementColor />
+        <SetDimensions />
         <SetElementOpacity />
         <SetElementShadow />
       </div>

@@ -7,6 +7,8 @@ import { shapesService } from "./shapesService";
 import { textService } from "./textService";
 import { zIndexService } from "./zIndexService";
 import { canvasEventsService } from "./canvasEventsService";
+import { dimensionService } from "./dimensionService";
+import { drawingModeService } from "./drawingModeService";
 
 import { testServices } from "./testServices";
 
@@ -31,6 +33,8 @@ class CanvasService {
     textService.initialize(this);
     zIndexService.initialize(this);
     canvasEventsService.initialize(this);
+    dimensionService.initialize(this);
+    drawingModeService.initialize(this);
 
     testServices.initialize(this);
 

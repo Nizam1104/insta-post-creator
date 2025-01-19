@@ -36,6 +36,12 @@ export const dimensionService = {
     const activeObject = this.canvasService?.canvas?.getActiveObject();
     if (!activeObject || typeof angle !== 'number') return;
     
+    // Set origin to center before rotating
+    activeObject.set({
+      originX: 'center',
+      originY: 'center'
+    });
+    
     activeObject.set('angle', angle);
     this.canvasService.saveCanvas();
     this.canvasService.canvas.renderAll();
@@ -55,6 +61,7 @@ export const dimensionService = {
 
   getDimensions() {
     const activeObject = this.canvasService?.canvas?.getActiveObject();
+    console.log('active obj', activeObject)
     if (!activeObject) return null;
     
     return {

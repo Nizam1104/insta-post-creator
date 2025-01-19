@@ -16,7 +16,7 @@ export const colorService = {
     const isGradient = currentFill && currentFill.colorStops;
 
     // Direct hex color support
-    if (colorCode.startsWith('#')) {
+    if (colorCode?.startsWith('#')) {
       activeObject.set('fill', colorCode);
     } else {
       const x = toRGB(colorCode);

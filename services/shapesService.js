@@ -12,8 +12,8 @@ export const shapesService = {
     const ellipse = new this.canvasService.fabricModule.Ellipse({
       left: 200,
       top: 100,
-      rx: 75,  // horizontal radius
-      ry: 50,  // vertical radius
+      rx: 75,
+      ry: 50,
       fill: hollow ? "transparent" : "black",
       stroke: "black",
       strokeWidth: 0.5,
