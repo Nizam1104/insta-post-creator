@@ -1,5 +1,3 @@
-
-import { testServices } from "./testServices";
 import { colorService } from "./colorService";
 import { shadowService } from "./shadowService";
 import { opacityService } from "./opacityService";
@@ -13,17 +11,18 @@ import { dimensionService } from "./dimensionService";
 import { drawingModeService } from "./drawingModeService";
 import { canvasDownloadService } from "./canvasDownloadService";
 
+import { testServices } from "./testServices";
 
-class CanvasService {
+class canvasService {
   canvas = null;
   fabricModule = null;
   history = [];
   historyIndex = -1;
   maxHistoryLength = 20;
   observers = [];
-  isUndoRedoInProgress = false; // Flag to track undo/redo state
 
   initialize(canvas, fabricModule) {
+    console.log('full screen canvas init called')
     this.canvas = canvas;
     this.fabricModule = fabricModule;
 
@@ -105,18 +104,18 @@ class CanvasService {
   saveCanvas() {
     if (!this.canvas) return;
     const canvasJSON = this.canvas.toJSON();
-    localStorage.setItem("savedCanvas", JSON.stringify(canvasJSON));
+    localStorage.setItem("savedFSCanvas", JSON.stringify(canvasJSON));
   }
 
   loadCanvas() {
     if (!this.canvas) return;
-    const savedCanvas = localStorage.getItem("savedCanvas");
-    const savedHistory = localStorage.getItem("canvasHistory");
-    const savedHistoryIndex = localStorage.getItem("canvasHistoryIndex");
+    const savedFSCanvas = localStorage.getItem("savedFSCanvas");
+    const savedHistory = localStorage.getItem("FSCanvasHistory");
+    const savedHistoryIndex = localStorage.getItem("FSCanvasHistoryIndex");
 
-    if (savedCanvas) {
-      this.canvas.loadFromJSON(JSON.parse(savedCanvas));
-      const color = localStorage.getItem("postCanvasBgColour") || "#FFFFFF";
+    if (savedFSCanvas) {
+      this.canvas.loadFromJSON(JSON.parse(savedFSCanvas));
+      const color = localStorage.getItem("FSCanvasBgColour") || "#FFFFFF";
       this.canvas.backgroundColor = color;
 
       if (savedHistory) {
@@ -138,7 +137,7 @@ class CanvasService {
     // Create a new canvas state object with the parsed elements
     const canvasState = {
       objects: parsedObj,
-      background: localStorage.getItem("postCanvasBgColour") || "#FFFFFF",
+      background: localStorage.getItem("FSCanvasBgColour") || "#FFFFFF",
     };
 
     // Load the canvas with the new state
@@ -173,22 +172,8 @@ class CanvasService {
       this.historyIndex--;
     }
 
-    localStorage.setItem("canvasHistory", JSON.stringify(this.history));
-    localStorage.setItem("canvasHistoryIndex", this.historyIndex);
-  }
-
-  loadStateFromHistory() {
-    if (!this.canvas || this.historyIndex < 0) return;
-
-    this.isUndoRedoInProgress = true; // Block history updates during load
-    const state = this.history[this.historyIndex];
-
-    this.canvas.loadFromJSON(state, () => {
-      this.canvas.renderAll();
-      this.saveCanvas();
-      localStorage.setItem("canvasHistoryIndex", this.historyIndex);
-      this.isUndoRedoInProgress = false; // Unblock after load
-    });
+    localStorage.setItem("FSCanvasHistory", JSON.stringify(this.history));
+    localStorage.setItem("FSCanvasHistoryIndex", this.historyIndex);
   }
 
   undo() {
@@ -202,6 +187,22 @@ class CanvasService {
     this.historyIndex++;
     this.loadStateFromHistory();
   }
+
+  loadStateFromHistory() {
+    if (!this.canvas || this.historyIndex < 0) return;
+
+    const state = this.history[this.historyIndex];
+    const currentBgColor = this.canvas.backgroundColor;
+
+    this.canvas.loadFromJSON(state);
+    setTimeout(() => {
+      this.canvas.backgroundColor = currentBgColor;
+      this.canvas.renderAll();
+
+      this.saveCanvas();
+      localStorage.setItem("FSCanvasHistoryIndex", this.historyIndex);
+    }, 30);
+  }
 }
 
-export const canvasService = new CanvasService();
+export const fullScreenCanvasService = new canvasService();

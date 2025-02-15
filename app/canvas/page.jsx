@@ -1,20 +1,8 @@
-import AskAi from "@/components/AskAi"
-import PostCanvas from "../../components/PostCanvas"
-import UndoRedoCanvas from "@/components/CanvasUtilities/UndoRedo"
-import DownloadCanvasThings from "@/components/CanvasUtilities/DownloadCanvasThings"
+import FullScreenCanvas from "@/components/CanvasFabrics/FullScreenCanvas"
 
 export default function CanvasPage() {
 
   return (
-    <div className="flex flex-col space-y-8">
-      {/* <TextEditor /> */}
-      <div className="flex space-x-4">
-      <UndoRedoCanvas />
-      <div className="flex flex-grow" />
-      <DownloadCanvasThings />
-      </div>
-      <PostCanvas />
-      <AskAi />
-    </div>
+    <FullScreenCanvas />
   )
 }
