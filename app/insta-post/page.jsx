@@ -1,4 +1,3 @@
-import AskAi from "@/components/AskAi"
 import PostCanvas from "@/components/CanvasFabrics/postCanvas"
 import UndoRedoCanvas from "@/components/CanvasUtilities/UndoRedo"
 import DownloadCanvasThings from "@/components/CanvasUtilities/DownloadCanvasThings"
@@ -14,7 +13,6 @@ export default function CanvasPage() {
       <DownloadCanvasThings />
       </div>
       <PostCanvas />
-      <AskAi />
     </div>
   )
 }
