@@ -140,8 +140,10 @@ export default function CreateCodeScreenShot() {
   return (
     <div>
       <Dialog>
-        <DialogTrigger className="bg-gray-800 text-gray-100 hover:bg-gray-700 px-4 py-2 rounded-md text-sm font-medium">
-          Code Picture
+        <DialogTrigger>
+          <span size="sm" className="bg-gray-200 text-slate-900 text-xs font-semibold hover:bg-gray-300 px-2 py-1 rounded-md">
+            Code to Image
+          </span>
         </DialogTrigger>
         <DialogContent className="bg-gray-900 border-gray-700 max-w-4xl">
           <DialogHeader>
