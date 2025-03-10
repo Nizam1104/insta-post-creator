@@ -42,7 +42,7 @@ export default function CanvasLayout({ children }) {
       
       <div
         className={`
-          fixed left-0 top-0 h-screen z-40 w-[400px] p-2 bg-gray-800
+          fixed left-0 top-0 h-screen z-40 w-[250px] p-2 bg-gray-800
           overflow-y-auto transition-transform duration-500
           ${isConfigVisible ? 'translate-x-0' : '-translate-x-full'}
         `}

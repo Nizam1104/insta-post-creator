@@ -13,7 +13,6 @@ export default function SetElementShadow() {
   });
 
   const handleChange = (key, value) => {
-    // Handle array values from Slider
     const actualValue = Array.isArray(value) ? value[0] : value;
     const newOptions = { ...shadowOptions, [key]: actualValue };
     setShadowOptions(newOptions);
@@ -21,15 +20,12 @@ export default function SetElementShadow() {
   };
 
   const handleRemoveShadow = () => {
-    // Reset shadow options with 0 offsets
     setShadowOptions({
       color: "rgba(0,0,0,0.5)",
       blur: 0,
       offsetX: 0,
       offsetY: 0,
     });
-
-    // Then remove shadow from canvas
     setTimeout(() => {
       shadowService.removeElementShadow();
     }, 0);
@@ -47,77 +43,69 @@ export default function SetElementShadow() {
             offsetY: shadowProperties.offsetY || 5
           });
         }
-      } else {
       }
     });
   
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   return (
-    <div className="flex flex-col gap-2 p-2 bg-gray-900 text-gray-400 rounded-md">
-      <h3 className="font-semibold text-gray-400 text-base">
-        Set Shadow properties
-      </h3>
-      <div className="flex flex-col gap-2">
-        <label className="text-sm text-gray-400">Shadow Color</label>
+    <div className="flex flex-col gap-1 p-1 bg-gray-900 text-gray-400 rounded-md text-xs">
+      <h3 className="font-semibold text-gray-400 text-sm mb-1">Shadow</h3>
+      
+      <div className="flex items-center gap-1">
         <input
           type="color"
           value={shadowOptions.color}
           onChange={(e) => handleChange("color", e.target.value)}
-          className="w-full h-10 bg-gray-800 rounded-lg border border-gray-700 focus:ring-2 focus:ring-blue-500"
+          className="w-6 h-6 bg-gray-800 rounded-md border border-gray-700 focus:ring-1 focus:ring-blue-500"
         />
+        
+        <div className="flex-1">
+          <label className="text-xs">Blur ({shadowOptions.blur}px)</label>
+          <input
+            type="range"
+            value={shadowOptions.blur}
+            onChange={(e) => handleChange("blur", parseInt(e.target.value))}
+            min={1}
+            max={100}
+            className="w-full h-1 bg-gray-800 rounded-lg"
+          />
+        </div>
       </div>
 
-      <div className="flex flex-col gap-2">
-        <label className="text-sm">Blur ({shadowOptions.blur}px)</label>
-        <input
-          type="range"
-          value={shadowOptions.blur}
-          onChange={(e) => handleChange("blur", parseInt(e.target.value))}
-          min={1}
-          max={100}
-          className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:hover:bg-blue-500"
-        />
-      </div>
+      <div className="space-y-1">
+        <div>
+          <label className="text-xs">X ({shadowOptions.offsetX}px)</label>
+          <input
+            type="range"
+            value={shadowOptions.offsetX}
+            onChange={(e) => handleChange("offsetX", parseInt(e.target.value))}
+            min={-100}
+            max={100}
+            className="w-full h-1 bg-gray-800 rounded-lg"
+          />
+        </div>
 
-      <div className="flex flex-col gap-2">
-        <label className="text-sm">
-          Horizontal Offset ({shadowOptions.offsetX}px)
-        </label>
-        <input
-          type="range"
-          value={shadowOptions.offsetX}
-          onChange={(e) => handleChange("offsetX", parseInt(e.target.value))}
-          min={-100}
-          max={100}
-          className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:hover:bg-blue-500"
-        />
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <label className="text-sm">
-          Vertical Offset ({shadowOptions.offsetY}px)
-        </label>
-        <input
-          type="range"
-          value={shadowOptions.offsetY}
-          onChange={(e) => handleChange("offsetY", parseInt(e.target.value))}
-          min={-100}
-          max={100}
-          className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:hover:bg-blue-500"
-        />
+        <div>
+          <label className="text-xs">Y ({shadowOptions.offsetY}px)</label>
+          <input
+            type="range"
+            value={shadowOptions.offsetY}
+            onChange={(e) => handleChange("offsetY", parseInt(e.target.value))}
+            min={-100}
+            max={100}
+            className="w-full h-1 bg-gray-800 rounded-lg"
+          />
+        </div>
       </div>
 
       <Button
-        type="primary"
-        size="sm"
+        size="xs"
         onClick={handleRemoveShadow}
-        className="mt-2 bg-red-600 hover:bg-red-700 text-white"
+        className="mt-1 bg-red-600 hover:bg-red-700 text-white h-6"
       >
-        Remove Shadow
+        Remove
       </Button>
     </div>
   );

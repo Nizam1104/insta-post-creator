@@ -66,21 +66,21 @@ export default function SetImageOnCanvas () {
   };
 
   return (
-    <div className="bg-gray-900 p-2 rounded-md">
-      <h2 className='text-gray-400 font-semibold text-base'>
+    <div className="bg-gray-900 p-1 rounded-md">
+      <h2 className='text-gray-400 font-semibold text-sm'>
         Add Image
       </h2>
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`p-2 border-2 border-dashed rounded-lg text-center mt-2 ${
+        className={`p-1 border-2 border-dashed rounded-md text-center mt-1 ${
           isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
         }`}
       >
-        <p className="text-gray-600">Drag & drop an image here</p>
-        <p className="text-gray-400 text-sm mt-2">or</p>
-        <Label className="px-2 py-[2px] bg-gray-400 text-gray-800 rounded-md">
+        <p className="text-gray-600 text-sm">Drag & drop an image here</p>
+        <p className="text-gray-400 text-xs mt-1">or</p>
+        <Label className="px-1.5 py-[1px] bg-gray-400 text-gray-800 rounded-sm text-sm">
           Browse Files
           <Input 
             type="file" 
@@ -91,7 +91,7 @@ export default function SetImageOnCanvas () {
         </Label>
       </div>
 
-      {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+      {error && <div className="text-red-500 text-xs mt-1">{error}</div>}
     </div>
   );
 };

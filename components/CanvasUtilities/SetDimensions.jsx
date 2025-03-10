@@ -28,7 +28,6 @@ export default function SetDimensions() {
       const currentDimensions = dimensionService.getDimensions();
       if (!currentDimensions) return;
 
-      // Determine shape type and set appropriate dimensions
       if (element.type === 'circle') {
         setShapeType('circle');
         setDimensions({
@@ -94,7 +93,6 @@ export default function SetDimensions() {
       dimensionService.setDimensions(width, height);
     }
 
-    // Apply scale if it was changed
     if (pendingDimensions.scale) {
       dimensionService.setScale(pendingDimensions.scale / 100);
     }
@@ -103,37 +101,37 @@ export default function SetDimensions() {
   };
 
   return (
-    <Card className="p-4 space-y-4 bg-gray-900 border-gray-700">
+    <Card className="p-2 space-y-2 bg-gray-900 border-gray-700">
       {shapeType === 'circle' && (
-        <div className="space-y-2">
-          <Label className="text-gray-300">Radius</Label>
+        <div className="flex items-center gap-2">
+          <Label className="text-xs text-gray-300 w-12">Radius</Label>
           <Input
             type="number"
             value={pendingDimensions.radius ?? dimensions.radius}
             onChange={(e) => handleDimensionChange('radius', e.target.value)}
-            className="bg-gray-800 border-gray-700 text-gray-200"
+            className="h-8 bg-gray-800 border-gray-700 text-gray-200 text-xs"
           />
         </div>
       )}
 
       {shapeType === 'ellipse' && (
         <>
-          <div className="space-y-2">
-            <Label className="text-gray-300">Radius X</Label>
+          <div className="flex items-center gap-2">
+            <Label className="text-xs text-gray-300 w-12">Radius X</Label>
             <Input
               type="number"
               value={pendingDimensions.radiusX ?? dimensions.radiusX}
               onChange={(e) => handleDimensionChange('radiusX', e.target.value)}
-              className="bg-gray-800 border-gray-700 text-gray-200"
+              className="h-8 bg-gray-800 border-gray-700 text-gray-200 text-xs"
             />
           </div>
-          <div className="space-y-2">
-            <Label className="text-gray-300">Radius Y</Label>
+          <div className="flex items-center gap-2">
+            <Label className="text-xs text-gray-300 w-12">Radius Y</Label>
             <Input
               type="number"
               value={pendingDimensions.radiusY ?? dimensions.radiusY}
               onChange={(e) => handleDimensionChange('radiusY', e.target.value)}
-              className="bg-gray-800 border-gray-700 text-gray-200"
+              className="h-8 bg-gray-800 border-gray-700 text-gray-200 text-xs"
             />
           </div>
         </>
@@ -141,44 +139,44 @@ export default function SetDimensions() {
 
       {(shapeType === 'rect' || shapeType === 'triangle') && (
         <>
-          <div className="space-y-2">
-            <Label className="text-gray-300">Width</Label>
+          <div className="flex items-center gap-2">
+            <Label className="text-xs text-gray-300 w-12">Width</Label>
             <Input
               type="number"
               value={pendingDimensions.width ?? dimensions.width}
               onChange={(e) => handleDimensionChange('width', e.target.value)}
-              className="bg-gray-800 border-gray-700 text-gray-200"
+              className="h-8 bg-gray-800 border-gray-700 text-gray-200 text-xs"
             />
           </div>
-          <div className="space-y-2">
-            <Label className="text-gray-300">Height</Label>
+          <div className="flex items-center gap-2">
+            <Label className="text-xs text-gray-300 w-12">Height</Label>
             <Input
               type="number"
               value={pendingDimensions.height ?? dimensions.height}
               onChange={(e) => handleDimensionChange('height', e.target.value)}
-              className="bg-gray-800 border-gray-700 text-gray-200"
+              className="h-8 bg-gray-800 border-gray-700 text-gray-200 text-xs"
             />
           </div>
         </>
       )}
 
-      <div className="space-y-2">
-        <Label className="text-gray-300">Scale (%)</Label>
+      <div className="flex items-center gap-2">
+        <Label className="text-xs text-gray-300 w-12">Scale</Label>
         <Input
           type="number"
           value={pendingDimensions.scale ?? dimensions.scale}
           onChange={(e) => handleDimensionChange('scale', e.target.value)}
           min="1"
           max="500"
-          className="bg-gray-800 border-gray-700 text-gray-200"
+          className="h-8 bg-gray-800 border-gray-700 text-gray-200 text-xs"
         />
       </div>
 
       <Button 
         onClick={applyDimensions}
-        className="w-full bg-blue-600 hover:bg-blue-700"
+        className="w-full h-8 bg-blue-600 hover:bg-blue-700 text-xs"
       >
-        Apply Dimensions
+        Apply
       </Button>
     </Card>
   );

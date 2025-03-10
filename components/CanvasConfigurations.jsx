@@ -34,13 +34,13 @@ export default function CanvasConfigurations() {
       <SetShapesOnCanvas />
       <SetImageOnCanvas />
       <DrawingModeConfig />
-      <SetElementZIndex />
 
       <div className="flex flex-col space-y-4">
         <span className="font-semibold text-gray-400">Element properties</span>
         <SetElementColor />
         <SetDimensions />
         <SetElementOpacity />
+        <SetElementZIndex />
         <SetCornerRadius />
         <SetElementShadow />
       </div>

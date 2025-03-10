@@ -20,18 +20,15 @@ export default function UndoRedoCanvas() {
   }
 
   return (
-    <div className="undo-redo-container flex space-x-4">
-      <Button size="sm" onClick={handleUndo} className="bg-gray-200 text-slate-900 text-xs font-semibold hover:bg-gray-300">
-        <span>Undo</span>
-        <IoIosUndo />
+    <div className="undo-redo-container flex space-x-2">
+      <Button size="icon" onClick={handleUndo} className="h-8 w-8 bg-gray-200 text-slate-900 hover:bg-gray-300">
+        <IoIosUndo className="h-4 w-4" />
       </Button>
-      <Button size="sm" onClick={handleRedo} className="bg-gray-200 text-slate-900 text-xs font-semibold hover:bg-gray-300">
-        <span>Redo</span>
-        <IoIosRedo />
+      <Button size="icon" onClick={handleRedo} className="h-8 w-8 bg-gray-200 text-slate-900 hover:bg-gray-300">
+        <IoIosRedo className="h-4 w-4" />
       </Button>
-      <Button size="sm" onClick={handleDelete} className="bg-gray-200 text-slate-900 text-xs font-semibold hover:bg-gray-300">
-        Delete
-        <MdOutlineDelete />
+      <Button size="icon" onClick={handleDelete} className="h-8 w-8 bg-gray-200 text-slate-900 hover:bg-gray-300">
+        <MdOutlineDelete className="h-4 w-4" />
       </Button>
     </div>
   );
