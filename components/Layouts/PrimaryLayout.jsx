@@ -38,9 +38,8 @@ export default function PrimaryLayout({ children }) {
 
       {/* Main Content with Three Columns */}
       <div className="pt-[60px] h-[calc(100vh-0px)]">
-        {" "}
         {/* Offset for fixed header and full height */}
-        <div className="container mx-auto h-full w-full">
+        <div className="px-6 h-full">
           <div className="flex gap-6 py-6 h-full">
             {/* Left Column */}
             <div className="w-[30%] bg-gray-800 rounded-lg shadow-sm p-4 h-full overflow-y-auto">

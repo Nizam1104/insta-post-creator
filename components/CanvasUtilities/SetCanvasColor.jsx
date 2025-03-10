@@ -54,7 +54,7 @@ export default function SetCanvasColor() {
     if (validateHex(hexInput)) {
       setColor(hexInput);
       updateRgbColor(hexInput);
-      colorService.loadCanvasColor()
+      colorService.setCanvasColor(hexInput)
     }
   };
 
