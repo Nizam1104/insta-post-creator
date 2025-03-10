@@ -2,52 +2,54 @@
 
 import { useState, useEffect } from 'react';
 import CanvasConfigurations from "@/components/CanvasConfigurations";
-import FullScreenLayout from "@/components/Layouts/FullScreen";
+import { FaBars, FaTimes } from "react-icons/fa";
+import { canvasState } from "@/services/canvasState";
+import SidebarSkeleton from "@/components/Skeletons/SidebarSkeleton";
 
 export default function CanvasLayout({ children }) {
   const [isConfigVisible, setConfigVisible] = useState(false);
-  const [hoverTimeout, setHoverTimeout] = useState(null);
-
-  // Add global mouse move handler
+  const [isCanvasReady, setIsCanvasReady] = useState(false);
+  
+  // Check if canvas is ready
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (e.clientX <= 100) {
-        if (hoverTimeout) {
-          clearTimeout(hoverTimeout);
-        }
-        setConfigVisible(true);
+    // Check if canvas is ready initially
+    setIsCanvasReady(canvasState.isCanvasReady());
+    
+    // Set up an interval to check canvas readiness
+    const checkCanvasInterval = setInterval(() => {
+      if (canvasState.isCanvasReady()) {
+        setIsCanvasReady(true);
+        clearInterval(checkCanvasInterval);
       }
-    };
+    }, 500);
+    
+    return () => clearInterval(checkCanvasInterval);
+  }, []);
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (hoverTimeout) {
-        clearTimeout(hoverTimeout);
-      }
-    };
-  }, [hoverTimeout]);
-
-  const handleMouseLeave = () => {
-    const timeout = setTimeout(() => {
-      setConfigVisible(false);
-    }, 200);
-    setHoverTimeout(timeout);
+  const toggleSidebar = () => {
+    setConfigVisible(!isConfigVisible);
   };
 
   return (
-    <FullScreenLayout>
-      <div 
+    <div className="fixed inset-0 w-screen h-screen overflow-hidden">
+      {/* Toggle Button */}
+      <button 
+        onClick={toggleSidebar}
+        className="fixed top-4 left-4 z-50 bg-gray-700 p-2 rounded-md text-white hover:bg-gray-600 transition-colors"
+      >
+        {isConfigVisible ? <FaTimes size={20} /> : <FaBars size={20} />}
+      </button>
+      
+      <div
         className={`
           fixed left-0 top-0 h-screen z-40 w-[400px] p-2 bg-gray-800
           overflow-y-auto transition-transform duration-500
           ${isConfigVisible ? 'translate-x-0' : '-translate-x-full'}
         `}
-        onMouseLeave={handleMouseLeave}
       >
-        <CanvasConfigurations />
+        {isCanvasReady ? <CanvasConfigurations /> : <SidebarSkeleton />}
       </div>
       {children}
-    </FullScreenLayout>
+    </div>
   );
 }

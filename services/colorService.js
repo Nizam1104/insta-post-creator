@@ -2,30 +2,49 @@ import { toRGB } from "./utilFunctions";
 
 export const colorService = {
   canvasService: null,
-  
+
   initialize(canvasService) {
     this.canvasService = canvasService;
+  },
+
+  loadCanvasColor(fullScreen) {
+    const storageKey = fullScreen
+      ? "fullScreenCanvasBgColor"
+      : "postCanvasBgColour";
+    const color = localStorage.getItem(storageKey);
+
+    if (color) {
+      try {
+        // Handle both string colors and gradient objects
+        const parsedColor = JSON.parse(color);
+        this.setCanvasColor(
+          typeof parsedColor === "object" ? parsedColor : color
+        );
+      } catch (e) {
+        this.setCanvasColor(color);
+      }
+    }
   },
 
   setElementColor(colorCode) {
     const activeObject = this.canvasService?.canvas?.getActiveObject();
     if (!activeObject) return;
-    
+
     // Get current fill to check if it's a gradient
-    const currentFill = activeObject.get('fill');
+    const currentFill = activeObject.get("fill");
     const isGradient = currentFill && currentFill.colorStops;
 
     // Direct hex color support
-    if (colorCode?.startsWith('#')) {
-      activeObject.set('fill', colorCode);
+    if (colorCode?.startsWith("#")) {
+      activeObject.set("fill", colorCode);
     } else {
       const x = toRGB(colorCode);
-      activeObject.set('fill', `rgb(${x?.r || 0}, ${x?.g || 0}, ${x?.b || 0})`);
+      activeObject.set("fill", `rgb(${x?.r || 0}, ${x?.g || 0}, ${x?.b || 0})`);
     }
 
     if (isGradient) {
-      activeObject.set('gradientAngle', null);
-      activeObject.set('gradientCoords', null);
+      activeObject.set("gradientAngle", null);
+      activeObject.set("gradientCoords", null);
     }
 
     this.canvasService.saveCanvas();
@@ -35,21 +54,21 @@ export const colorService = {
   setCanvasColor(color) {
     if (!this.canvasService?.canvas) return;
 
-    if (typeof color === 'string') {
+    if (typeof color === "string") {
       // Handle solid color
       this.canvasService.canvas.backgroundColor = color;
-      localStorage.setItem('postCanvasBgColour', color);
-    } else if (typeof color === 'object' && color.colorStops) {
+      // Remove localStorage.setItem("postCanvasBgColour", color);
+    } else if (typeof color === "object" && color.colorStops) {
       // Handle gradient
       const gradient = new this.canvasService.fabricModule.Gradient({
-        type: color.type || 'linear',
+        type: color.type || "linear",
         coords: color.coords || {
           x1: 0,
           y1: 0,
           x2: this.canvasService.canvas.width,
-          y2: this.canvasService.canvas.height
+          y2: this.canvasService.canvas.height,
         },
-        colorStops: color.colorStops
+        colorStops: color.colorStops,
       });
       this.canvasService.canvas.backgroundColor = gradient;
     }
@@ -61,14 +80,14 @@ export const colorService = {
   setGradient(opts) {
     const activeObject = this.canvasService?.canvas?.getActiveObject();
     if (!activeObject || !this.canvasService?.fabricModule) return;
-    if (!opts || typeof opts !== 'object') return;
-    if (!opts.type || !['linear', 'radial'].includes(opts.type)) return;
-    if (!opts.coords || typeof opts.coords !== 'object') return;
+    if (!opts || typeof opts !== "object") return;
+    if (!opts.type || !["linear", "radial"].includes(opts.type)) return;
+    if (!opts.coords || typeof opts.coords !== "object") return;
     if (!opts.colorStops || !Array.isArray(opts.colorStops)) return;
     if (opts.colorStops.length < 2) return;
 
     // Get current fill to check if it's already a gradient
-    const currentFill = activeObject.get('fill');
+    const currentFill = activeObject.get("fill");
     const isCurrentGradient = currentFill && currentFill.colorStops;
 
     const defaultCoords = {
@@ -76,7 +95,7 @@ export const colorService = {
         x1: 0,
         y1: 0,
         x2: activeObject.width,
-        y2: activeObject.height
+        y2: activeObject.height,
       },
       radial: {
         x1: activeObject.width / 2,
@@ -84,11 +103,11 @@ export const colorService = {
         r1: 0,
         x2: activeObject.width / 2,
         y2: activeObject.height / 2,
-        r2: Math.max(activeObject.width, activeObject.height) / 2
-      }
+        r2: Math.max(activeObject.width, activeObject.height) / 2,
+      },
     };
 
-    if (opts.type === 'radial') {
+    if (opts.type === "radial") {
       if (!opts.coords.r1 && opts.coords.r1 !== 0) {
         opts.coords.r1 = 0;
       }
@@ -103,12 +122,11 @@ export const colorService = {
     const gradient = new this.canvasService.fabricModule.Gradient({
       type: opts.type,
       coords: opts.coords,
-      colorStops: colorStops
+      colorStops: colorStops,
     });
 
-    activeObject.set('fill', gradient);
+    activeObject.set("fill", gradient);
     this.canvasService.canvas.renderAll();
     this.canvasService.saveCanvas();
   },
-
 };

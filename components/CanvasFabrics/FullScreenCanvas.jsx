@@ -7,18 +7,11 @@ import { colorService } from "@/services/colorService";
 const FullScreenCanvas = () => {
   const { canvas, fabricModule } = useFabric("fullPageCanvas", true);
 
-  console.log('canvas', canvas)
-  console.log('fab module', fabricModule)
-
   useEffect(() => {
     if (canvas && fabricModule) {
-      console.log('indie if')
       fullScreenCanvasService.initialize(canvas, fabricModule);
       
-      const savedColor = localStorage.getItem('postCanvasBgColour');
-      if (savedColor) {
-        colorService.setCanvasColor(savedColor);
-      }
+      colorService.loadCanvasColor(true);
     }
 
     return () => {

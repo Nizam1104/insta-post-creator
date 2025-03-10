@@ -1,13 +1,34 @@
 "use client"
+import { useState, useEffect } from "react";
 import CanvasConfigurations from "../CanvasConfigurations";
 import CreateCodeScreenShot from "../Modals/CreateCodeScreenShot";
 import { useRouter } from "next/navigation";
+import { canvasState } from "../../services/canvasState";
+import SidebarSkeleton from "../Skeletons/SidebarSkeleton";
 
 export default function PrimaryLayout({ children }) {
-  const router = useRouter()
+  const router = useRouter();
+  const [isCanvasReady, setIsCanvasReady] = useState(false);
+  
+  useEffect(() => {
+    // Check if canvas is ready initially
+    setIsCanvasReady(canvasState.isCanvasReady());
+    
+    // Set up an interval to check canvas readiness
+    const checkCanvasInterval = setInterval(() => {
+      if (canvasState.isCanvasReady()) {
+        setIsCanvasReady(true);
+        clearInterval(checkCanvasInterval);
+      }
+    }, 500);
+    
+    return () => clearInterval(checkCanvasInterval);
+  }, []);
+  
   function gotoCanvas() {
     router.push('/canvas')
   }
+  
   return (
     <div className="min-h-screen bg-gray-900">
       {/* Fixed Header */}
@@ -23,7 +44,7 @@ export default function PrimaryLayout({ children }) {
           <div className="flex gap-6 py-6 h-full">
             {/* Left Column */}
             <div className="w-[30%] bg-gray-800 rounded-lg shadow-sm p-4 h-full overflow-y-auto">
-              <CanvasConfigurations />
+              {isCanvasReady ? <CanvasConfigurations /> : <SidebarSkeleton />}
             </div>
 
             {/* Middle Column */}

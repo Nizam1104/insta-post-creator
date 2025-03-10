@@ -1,4 +1,4 @@
-
+import { canvasState } from "./canvasState";
 import { testServices } from "./testServices";
 import { colorService } from "./colorService";
 import { shadowService } from "./shadowService";
@@ -26,6 +26,8 @@ class CanvasService {
   initialize(canvas, fabricModule) {
     this.canvas = canvas;
     this.fabricModule = fabricModule;
+    canvasState.activeCanvas = this
+    canvasState.activeCanvasType = 'post'
 
     colorService.initialize(this);
     shadowService.initialize(this);
@@ -64,6 +66,11 @@ class CanvasService {
     if (this.history.length === 0) {
       this.addToHistory();
     }
+  }
+
+  getBackgroundColor() {
+    if (!this.canvas) return null;
+    return this.canvas.backgroundColor;
   }
 
   subscribe(callback) {
@@ -116,8 +123,7 @@ class CanvasService {
 
     if (savedCanvas) {
       this.canvas.loadFromJSON(JSON.parse(savedCanvas));
-      const color = localStorage.getItem("postCanvasBgColour") || "#FFFFFF";
-      this.canvas.backgroundColor = color;
+      this.canvas.renderAll();
 
       if (savedHistory) {
         this.history = JSON.parse(savedHistory);
@@ -138,7 +144,7 @@ class CanvasService {
     // Create a new canvas state object with the parsed elements
     const canvasState = {
       objects: parsedObj,
-      background: localStorage.getItem("postCanvasBgColour") || "#FFFFFF",
+      background: "#FFFFFF", // Set default background color directly
     };
 
     // Load the canvas with the new state

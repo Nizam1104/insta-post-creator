@@ -1,3 +1,4 @@
+import { canvasState } from "./canvasState";
 import { colorService } from "./colorService";
 import { shadowService } from "./shadowService";
 import { opacityService } from "./opacityService";
@@ -13,7 +14,7 @@ import { canvasDownloadService } from "./canvasDownloadService";
 
 import { testServices } from "./testServices";
 
-class canvasService {
+class CanvasService {
   canvas = null;
   fabricModule = null;
   history = [];
@@ -25,6 +26,8 @@ class canvasService {
     console.log('full screen canvas init called')
     this.canvas = canvas;
     this.fabricModule = fabricModule;
+    canvasState.activeCanvas = this
+    canvasState.activeCanvasType = 'fullScreen'
 
     colorService.initialize(this);
     shadowService.initialize(this);
@@ -63,6 +66,11 @@ class canvasService {
     if (this.history.length === 0) {
       this.addToHistory();
     }
+  }
+
+  getBackgroundColor() {
+    if (!this.canvas) return null;
+    return this.canvas.backgroundColor;
   }
 
   subscribe(callback) {
@@ -205,4 +213,4 @@ class canvasService {
   }
 }
 
-export const fullScreenCanvasService = new canvasService();
+export const fullScreenCanvasService = new CanvasService();

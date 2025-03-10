@@ -21,5 +21,4 @@ export const canvasDownloadService = {
     link.click();
     document.body.removeChild(link);
   }
-
 }

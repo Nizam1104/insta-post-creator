@@ -1,5 +1,6 @@
 "use client";
-import { canvasService } from "@/services/canvasService";
+
+import { canvasState } from "@/services/canvasState";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"
@@ -30,12 +31,39 @@ export default function SetCanvasColor() {
     r2: 500,
   });
 
+  useEffect(() => {
+    if (canvasState.isCanvasReady()) {
+      const currentBgColor = canvasState.getCanvasBackgroundColor();
+      
+      // Handle gradient background
+      if (typeof currentBgColor === 'object' && currentBgColor.type) {
+        setIsGradient(true);
+        setGradientType(currentBgColor.type);
+        
+        if (currentBgColor.coords) {
+          setGradientCoords(currentBgColor.coords);
+        }
+        
+        if (currentBgColor.colorStops) {
+          setGradientStops(currentBgColor.colorStops);
+        }
+      } 
+      // Handle solid color background
+      else if (typeof currentBgColor === 'string') {
+        setIsGradient(false);
+        setColor(currentBgColor);
+        setHexInput(currentBgColor);
+        updateRgbColor(currentBgColor);
+      }
+    }
+  }, []);
+
   const handleHexSubmit = (e) => {
     e.preventDefault();
     if (validateHex(hexInput)) {
       setColor(hexInput);
       updateRgbColor(hexInput);
-      colorService.setCanvasColor(hexInput);
+      colorService.loadCanvasColor()
     }
   };
 
@@ -82,13 +110,6 @@ export default function SetCanvasColor() {
     });
   };
 
-  useEffect(() => {
-    const savedColor = localStorage.getItem("postCanvasBgColour") || "#ffffff";
-    setColor(savedColor);
-    setHexInput(savedColor);
-    updateRgbColor(savedColor);
-  }, []);
-
   return (
     <div className="text-white space-y-4 bg-gray-900 p-4 rounded-md border border-gray-700">
       <div className="flex items-center space-x-3">
@@ -103,10 +124,6 @@ export default function SetCanvasColor() {
             value={color}
             className="absolute inset-0 w-full h-full cursor-pointer -p-2"
           />
-          {/* <div
-            className="absolute inset-0"
-            style={{ backgroundColor: color }}
-          /> */}
         </div>
         <div className="flex-grow" />
         <Button

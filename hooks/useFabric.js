@@ -1,5 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 
+const getCanvasBgColor = (fullScreen = false) => {
+  let bgColor = ''
+  if (fullScreen) {
+    bgColor = localStorage.getItem('fullScreenCanvasBgColor') || '#FFFFFF'
+  } else {
+    bgColor = localStorage.getItem('postCanvasBgColour') || '#FFFFFF'
+  }
+  return bgColor
+}
+
 export const useFabric = (canvasId, fullScreen = false) => {
   const [canvas, setCanvas] = useState(null);
   const [fabricModule, setFabricModule] = useState(null);
@@ -40,8 +50,9 @@ export const useFabric = (canvasId, fullScreen = false) => {
           throw new Error('Fabric.js failed to load properly');
         }
 
+        const backgroundColor = getCanvasBgColor(fullScreen)
+
         const canvasOptions = {
-          backgroundColor: localStorage.getItem('postCanvasBgColour') || '#FFFFFF',
           selection: true,
           preserveObjectStacking: true,
           width: fullScreen ? window.innerWidth : 500,
